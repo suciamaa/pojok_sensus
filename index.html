@@ -28,7 +28,7 @@
 <div class="container header-content">
 <div class="brand">
 <div class="brand-icon">
-                    BPS
+                    <img src="assets/logo-kolaborasi-se2026.png" alt="Logo Universitas Sriwijaya, BPS, dan Sensus Ekonomi 2026" class="section-brand-logo">
                 </div>
 <div class="brand-text">
 <span>
@@ -54,7 +54,7 @@
         </div>
 <h1>Pojok Sensus</h1>
 <p class="welcome-subtitle">
-            Pengisian Kuesioner Sensus Ekonomi Mahasiswa
+            Pengisian Kuesioner Sensus Ekonomi 2026
         </p>
 <p class="welcome-location">
             Mahasiswa Universitas Sriwijaya yang berdomisili di Indralaya
@@ -70,7 +70,7 @@
 <span class="welcome-info-label">KRITERIA KUESIONER</span>
 <h3>Sebelum Memulai Pastikan Anda Memenuhi Kriteria Pendataan</h3>
 <p>
-                        Kuesioner ini ditujukan bagi Mahasiswa Universitas Sriwijaya yang berdomisili di Indralaya Utara dan Indralaya Selatan dan saat ini tinggal 
+                        Kuesioner ini ditujukan bagi Mahasiswa Universitas Sriwijaya yang berdomisili di Indralaya, Indralaya Utara dan Indralaya Selatan dan saat ini tinggal 
                         secara mandiri, tidak bersama orang tua atau wali
                     </p>
 </div>
@@ -87,9 +87,6 @@
                             dan bersedia melanjutkan pengisian kuesioner.</strong>
 </span>
 </label>
-<div class="consent-error" id="consentError" role="alert">
-                        Silakan centang pernyataan terlebih dahulu sebelum melanjutkan.
-                    </div>
 <button class="welcome-next-btn" id="startFormBtn" type="button">
 <span>Mulai Pengisian</span>
 <span aria-hidden="true">→</span>
@@ -343,6 +340,16 @@
                     <span>→</span>
 </button>
 </div>
+
+<!-- FOOTER BRANDING DATA AKADEMIK -->
+<div class="section-brand-footer" aria-label="Informasi Data Akademik">
+    <div class="section-brand-footer-text">
+        <span class="section-brand-label">DATA AKADEMIK</span>
+        <strong>Lengkapi data dengan benar dan sesuai kondisi Anda.</strong>
+        <small>Pojok Sensus • Sensus Ekonomi 2026</small>
+    </div>
+    <img src="assets/logo-kolaborasi-se2026.png" alt="Logo Universitas Sriwijaya, BPS, dan Sensus Ekonomi 2026" class="section-brand-logo">
+</div>
 </section>
 <!-- =====================================
              FORM 2
@@ -546,6 +553,16 @@
                     Lanjutkan Pengisian
                     <span>→</span>
 </button>
+</div>
+
+<!-- FOOTER BRANDING TEMPAT TINGGAL -->
+<div class="section-brand-footer" aria-label="Informasi Tempat Tinggal">
+    <div class="section-brand-footer-text">
+        <span class="section-brand-label">TEMPAT TINGGAL</span>
+        <strong>Pastikan lokasi dan alamat tempat tinggal sudah sesuai.</strong>
+        <small>Pojok Sensus • Sensus Ekonomi 2026</small>
+    </div>
+    <img src="assets/logo-kolaborasi-se2026.png" alt="Logo Universitas Sriwijaya, BPS, dan Sensus Ekonomi 2026" class="section-brand-logo">
 </div>
 </section>
 <!-- =====================================
@@ -1056,8 +1073,8 @@
 </label>
 <select class="form-select" data-required="true" id="profesiPekerjaanUtama" name="profesiPekerjaanUtama" required="">
 <option value="">Pilih profesi/pekerjaan utama</option>
-<option value="000">000. Tidak Bekerja</option>
 <option value="013">013. Atlet/Olahragawan</option>
+<option value="021">021. Buruh Angkut Barang</option>
 <option value="022">022. Buruh Bangunan</option>
 <option value="023">023. Buruh Industri</option>
 <option value="024">024. Buruh Perikanan</option>
@@ -1065,17 +1082,26 @@
 <option value="027">027. Buruh Peternakan</option>
 <option value="029">029. Chef</option>
 <option value="038">038. Fotografer</option>
+<option value="039">039. Gembala</option>
 <option value="041">041. Guru</option>
+<option value="044">044. Imam Masjid</option>
+<option value="048">048. Juru Gambar Teknik/Drafter</option>
+<option value="049">049. Kameramen</option>
 <option value="051">051. Kasir</option>
 <option value="056">056. Kreator Konten</option>
 <option value="058">058. Kurir</option>
+<option value="060">060. Makelar</option>
+<option value="063">063. Mekanik</option>
 <option value="068">068. Operator Layanan Pelanggan (Customer Service)</option>
+<option value="069">069. Operator Mesin</option>
 <option value="075">075. Pedagang</option>
 <option value="076">076. Pedagang Asongan/Keliling Makanan</option>
 <option value="077">077. Pedagang Asongan/Keliling Nonmakanan</option>
 <option value="078">078. Pedagang Online</option>
 <option value="089">089. Pelayan Toko</option>
 <option value="090">090. Pembantu/Asisten Rumah Tangga</option>
+<option value="101">101. Penata Rambut</option>
+<option value="102">102. Penata Rias</option>
 <option value="106">106. Penerjemah</option>
 <option value="108">108. Pengasuh Anak (Baby Sitter)</option>
 <option value="110">110. Pengemudi Ojek Online</option>
@@ -1085,10 +1111,13 @@
 <option value="117">117. Penyiar Radio</option>
 <option value="129">129. Petani/Pekebun/Petani Hutan</option>
 <option value="130">130. Peternak</option>
-<option value="139">139. Pramugara/i</option>
-<option value="140">140. Pramuniaga</option>
+<option value="140">140. Pramusaji</option>
 <option value="142">142. Programer</option>
 <option value="143">143. Tukang Fotokopi</option>
+<option value="154">154. Tenaga Cuci</option>
+<option value="156">156. Tenaga Kebersihan</option>
+<option value="161">161. Tukang Cukur</option>
+<option value="162">162. Tukang Fotokopi</option>
 <option value="185">185. Lainnya</option>
 <option value="999">999. Tidak Tahu</option>
 </select>
@@ -1934,6 +1963,11 @@
 <span>Tidak</span>
 </label>
 </div>
+</div>
+<!-- c.11.6 Lainnya: isian manual hanya jika dipilih Ya -->
+<div class="question-box conditional-field hidden" id="internetLainnyaField">
+<label for="internetLainnyaText">Tuliskan tujuan penggunaan internet lainnya:</label>
+<input data-required="true" id="internetLainnyaText" name="internetLainnyaText" maxlength="255" type="text" placeholder="Tuliskan tujuan lainnya"/>
 </div>
 </div>
 </div>
@@ -3563,6 +3597,15 @@
 <button class="btn btn-submit" type="submit">
             ✓ Submit Data 
         </button>
+</div>
+<!-- FOOTER BRANDING KUESIONER -->
+<div class="section-brand-footer questionnaire-brand-footer" aria-label="Informasi Kuesioner">
+    <div class="section-brand-footer-text">
+        <span class="section-brand-label">KUESIONER</span>
+        <strong>Terima kasih telah berpartisipasi dalam Pojok Sensus.</strong>
+        <small>Badan Pusat Statistik • Sensus Ekonomi 2026</small>
+    </div>
+    <img src="assets/logo-kolaborasi-se2026.png" alt="Logo Universitas Sriwijaya, BPS, dan Sensus Ekonomi 2026" class="section-brand-logo">
 </div>
 </section>
 </form>

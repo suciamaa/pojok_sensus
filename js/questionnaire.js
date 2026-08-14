@@ -1788,6 +1788,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 childLabel.insertBefore(strong, childLabel.firstChild);
             });
         }
+
+        // c.10 = penggunaan internet; c.11 adalah kelompok tujuan yang
+        // tampil hanya ketika c.10 dijawab Iya. Setiap tujuan diberi
+        // penomoran c.11.1, c.11.2, dst. tanpa mengubah isi pertanyaan.
+        const internetGroup = section.querySelector(':scope > #tujuanPenggunaanInternet');
+        if (internetGroup) {
+            const internetLabel = internetGroup.querySelector(':scope > .question-box > label');
+            if (internetLabel) {
+                internetLabel.querySelector(':scope > strong')?.remove();
+                const strong = document.createElement('strong');
+                strong.textContent = 'c.10';
+                internetLabel.insertBefore(strong, internetLabel.firstChild);
+            }
+
+            const tujuanBoxes = [...internetGroup.querySelectorAll(':scope > .question-box > .question-box')];
+            tujuanBoxes.forEach((box, index) => {
+                const label = box.querySelector(':scope > label');
+                if (!label) return;
+                label.querySelector(':scope > strong')?.remove();
+                const strong = document.createElement('strong');
+                strong.textContent = `c.10.${index + 1}`;
+                label.insertBefore(strong, label.firstChild);
+            });
+        }
     }
 
     function toggleWithin(root, selector, show) {
@@ -2215,7 +2239,21 @@ document.addEventListener("DOMContentLoaded", () => {
             const internet = selectedWithin(card, "menggunakanInternet");
             const memakaiInternet = memilikiUsaha && internet === "1";
             toggleWithin(card, '[id^="tujuanPenggunaanInternet"]', memakaiInternet);
-            if (!memakaiInternet) clearWithin(card, '[id^="tujuanPenggunaanInternet"]');
+
+            // c.10 = Iya -> tampilkan seluruh c.11.
+            // c.10 = Tidak -> sembunyikan dan kosongkan seluruh c.11.
+            if (!memakaiInternet) {
+                clearWithin(card, '[id^="tujuanPenggunaanInternet"]');
+            }
+
+            // c.11.6 Lainnya = Ya -> tampilkan isian manual.
+            // Jika c.10 bukan Iya, field ini selalu tersembunyi.
+            const internetLainnya = selectedWithin(card, "internetLainnya");
+            const tampilkanInternetLainnya = memakaiInternet && internetLainnya === "1";
+            toggleWithin(card, '[id^="internetLainnyaField"]', tampilkanInternetLainnya);
+            if (!tampilkanInternetLainnya) {
+                clearWithin(card, '[id^="internetLainnyaField"]');
+            }
 
         });
 
@@ -2271,6 +2309,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!memakaiInternet) {
             clearConditionalData("tujuanPenggunaanInternet");
+        }
+
+        const internetLainnya =
+            selected("internetLainnya");
+
+        const tampilkanInternetLainnya =
+            memakaiInternet && internetLainnya === "1";
+
+        toggle("internetLainnyaField", tampilkanInternetLainnya);
+
+        if (!tampilkanInternetLainnya) {
+            clearConditionalData("internetLainnyaField");
         }
 
         // -----------------------------------------------------
