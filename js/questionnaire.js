@@ -527,7 +527,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // =================================================
             // Data kuesioner TIDAK disimpan otomatis.
             // Yang disimpan sebagai draft hanya data registrasi
-            // (tahap 1-3) melalui save_profile.php.
+            // (tahap 1-3) melalui endpoint Node.js /api/save_profile.
 
             clearQuestionnaireForm();
 
@@ -536,7 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // =================================================
             try {
                 const response = await fetch(
-                    `api/get_profile.php?nim=${encodeURIComponent(activeNIM)}&t=${Date.now()}`,
+                    `api/get_profile?nim=${encodeURIComponent(activeNIM)}&t=${Date.now()}`,
                     { cache: "no-store" }
                 );
 
@@ -1867,6 +1867,49 @@ document.addEventListener("DOMContentLoaded", () => {
         "identPertanianJasa"
     ];
 
+    // =========================================================
+    // MATRIX UI BLOK D - PERTANYAAN 2
+    // Radio hanya menjadi UI. Select asli tetap menjadi sumber data
+    // agar seluruh logic/conditional/validasi lama tetap digunakan.
+    // =========================================================
+
+    function setupPertanianMatrixUI() {
+        const root = document.getElementById("identifikasiUsahaPertanianMatrix");
+        if (!root || root.dataset.matrixInitialized === "true") return;
+
+        root.dataset.matrixInitialized = "true";
+
+        const syncRadios = (select) => {
+            root.querySelectorAll(
+                `.matrix-ui-radio[data-matrix-target="${CSS.escape(select.id)}"]`
+            ).forEach(radio => {
+                radio.checked = radio.value === select.value;
+            });
+        };
+
+        root.querySelectorAll(".matrix-source-select").forEach(select => {
+            syncRadios(select);
+
+            select.addEventListener("change", () => {
+                syncRadios(select);
+            });
+        });
+
+        root.querySelectorAll(".matrix-ui-radio").forEach(radio => {
+            radio.addEventListener("change", () => {
+                if (!radio.checked) return;
+
+                const target = document.getElementById(radio.dataset.matrixTarget);
+                if (!target) return;
+
+                target.value = radio.value;
+                target.dispatchEvent(new Event("change", { bubbles: true }));
+                syncRadios(target);
+            });
+        });
+    }
+
+
     function setupUsahaQuantityFields() {
         usahaQuantityMap.forEach(id => {
             const select = document.getElementById(id);
@@ -2681,6 +2724,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     restructureIdentityBusinessTemplate();
     setupUsahaQuantityFields();
+    setupPertanianMatrixUI();
 
     const nibInput = document.getElementById("nib");
     nibInput?.addEventListener("input", () => {
@@ -2918,7 +2962,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const response =
                     await fetch(
-                        "api/submit.php",
+                        "api/submit",
                         {
                             method: "POST",
                             body: fd

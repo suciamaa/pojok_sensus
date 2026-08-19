@@ -1,1 +1,0 @@
-# pojok_sensus

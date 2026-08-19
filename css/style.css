@@ -3674,11 +3674,49 @@ select {
 }
 
 .question-box {
-    margin-top: 18px;
+    margin-top: 24px;
     padding: 18px;
     border: 1px solid var(--border);
     border-radius: 12px;
     background: #f7fafb;
+}
+
+/* =========================================================
+   BLOK F - STATUS KEPEMILIKAN
+   Jarak antar conditional question-box
+========================================================= */
+
+/* Semua conditional box di dalam question-box status kepemilikan */
+#statusKepemilikanLainnyaField,
+#nilaiKontrakSewaField,
+#perkiraanSewaBebasSendiriField {
+    margin-top: 12px !important;
+    box-sizing: border-box;
+}
+
+/* Jarak khusus dari dropdown ke conditional pertama */
+#statusKepemilikanRumah + #statusKepemilikanLainnyaField {
+    margin-top: 12px !important;
+}
+
+/* Jarak antara conditional a -> b */
+#statusKepemilikanLainnyaField + #nilaiKontrakSewaField {
+    margin-top: 12px !important;
+}
+
+/* Jarak antara conditional b -> c */
+#nilaiKontrakSewaField + #perkiraanSewaBebasSendiriField {
+    margin-top: 12px !important;
+}
+
+/* =========================================================
+   BLOK D - NIB
+   Jarak input "Tuliskan alasan lainnya"
+========================================================= */
+
+#alasanTidakNIBLainnyaField {
+    margin-top: 10px !important;
+    padding-top: 8px !important;
 }
 
 .subheading {
@@ -3785,6 +3823,53 @@ select {
 
 .question-box label[for="tanggalLahir"] .required {
     color: #dc2626;
+}
+
+/* =========================================================
+   BLOK F - SUMBER PENERANGAN
+   Jarak antar conditional question-box
+========================================================= */
+
+/* Semua conditional field */
+#jumlahMeteranField,
+#dayaListrikField,
+#idPelangganPLNField,
+#noMeteranListrikField,
+#pengeluaranListrikField {
+    margin-top: 12px !important;
+    box-sizing: border-box;
+}
+
+/* Jarak dropdown utama → field pertama */
+#sumberPenerangan + #jumlahMeteranField {
+    margin-top: 12px !important;
+}
+
+/* Jarak antar conditional field */
+#jumlahMeteranField + #dayaListrikField {
+    margin-top: 12px !important;
+}
+
+#dayaListrikField + #idPelangganPLNField {
+    margin-top: 12px !important;
+}
+
+#idPelangganPLNField + #noMeteranListrikField {
+    margin-top: 12px !important;
+}
+
+#noMeteranListrikField + #pengeluaranListrikField {
+    margin-top: 12px !important;
+}
+
+/* Input dan select tetap memenuhi lebar kotaknya */
+#jumlahMeteranField input,
+#dayaListrikField select,
+#idPelangganPLNField input,
+#noMeteranListrikField input,
+#pengeluaranListrikField input {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* INPUT DI DALAM QUESTION BOX */
@@ -4934,6 +5019,161 @@ textarea:focus,
 
   .matrix-table {
     min-width: 560px;
+  }
+}
+
+
+/* =========================================================
+   BLOK D - PERTANYAAN 2 USAHA PERTANIAN: MATRIX UI
+   Source select tetap dipertahankan untuk menjaga logic lama.
+========================================================= */
+.usaha-pertanian-matrix {
+  overflow: visible;
+}
+
+.usaha-pertanian-matrix .matrix-intro {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text, #1f2937);
+}
+
+/*
+   Setiap baris dibuat sebagai 3 bagian visual:
+   1) nama usaha + Iya/Tidak pada baris paling atas,
+   2) detail di bawah nama usaha,
+   3) field jumlah usaha full-width di bagian paling bawah.
+*/
+.usaha-pertanian-matrix .matrix-row {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  border-bottom: 1px solid #edf1f2;
+}
+
+.usaha-pertanian-matrix .matrix-row:last-child {
+  border-bottom: none;
+}
+
+.usaha-pertanian-matrix .matrix-topline {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 90px 90px;
+  align-items: center;
+  min-width: 0;
+}
+
+.usaha-pertanian-matrix .matrix-label-main {
+  min-width: 0;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.usaha-pertanian-matrix .matrix-label-main .subquestion-number {
+  display: inline-block;
+  margin-right: 6px;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.usaha-pertanian-matrix .matrix-detail {
+  min-width: 0;
+  padding: 0 14px 12px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-muted, #6b7280);
+}
+
+/* Select asli tetap ada untuk logic/validasi/penyimpanan lama.
+   Hanya disembunyikan secara visual. */
+.usaha-pertanian-matrix .matrix-source-select {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 0 !important;
+}
+
+.usaha-pertanian-matrix .matrix-option {
+  min-width: 0;
+  min-height: 54px;
+  padding: 10px 14px;
+  margin: 0;
+  align-self: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.usaha-pertanian-matrix .matrix-option input {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--orange);
+}
+
+/* Full width: mengikuti seluruh lebar matrix-table, bukan kolom kiri. */
+.usaha-pertanian-matrix .quantity-usaha-field {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 14px 14px;
+}
+
+.usaha-pertanian-matrix .quantity-usaha-field label {
+  display: block;
+  width: 100%;
+  margin: 0 0 6px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.usaha-pertanian-matrix .quantity-usaha-field input {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.usaha-pertanian-matrix .matrix-row:has(.matrix-source-select.invalid) {
+  background: rgba(220, 38, 38, 0.04);
+}
+
+@media (max-width: 700px) {
+  .usaha-pertanian-matrix .matrix-table {
+    min-width: 540px;
+  }
+
+  .usaha-pertanian-matrix .matrix-topline {
+    grid-template-columns: minmax(250px, 1fr) 80px 80px;
+  }
+
+  .usaha-pertanian-matrix .matrix-label-main,
+  .usaha-pertanian-matrix .matrix-detail,
+  .usaha-pertanian-matrix .quantity-usaha-field {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .usaha-pertanian-matrix .matrix-option {
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 11px;
   }
 }
 
@@ -6528,3 +6768,1265 @@ textarea:focus,
 :root {\n    --space-1: 6px;\n    --space-2: 10px;\n    --space-3: 14px;\n    --space-4: 18px;\n    --space-5: 24px;\n    --space-6: 30px;\n}\n\n/* Main section/card containers */\n.section,\n.questionnaire-section,\n.block,\n.card,\n.form-section,\n.business-section,\n.usaha-section {\n    margin-top: var(--space-5);\n    margin-bottom: var(--space-5);\n    padding-top: var(--space-5);\n    padding-bottom: var(--space-5);\n}\n\n/* Avoid doubled spacing between adjacent cards */\n.card + .card,\n.question-box + .question-box,\n.form-group + .form-group,\n.field + .field,\n.question + .question {\n    margin-top: var(--space-4);\n}\n\n/* Question boxes */\n.question-box,\n.question-card,\n.field,\n.form-group {\n    margin-top: var(--space-3);\n    margin-bottom: var(--space-3);\n    padding-top: var(--space-4);\n    padding-bottom: var(--space-4);\n}\n\n/* Labels and question text */\n.question-box label,\n.question-card label,\n.field label,\n.form-group label {\n    margin-bottom: var(--space-2);\n}\n\n/* Inputs/selects/textareas */\n.question-box input,\n.question-box select,\n.question-box textarea,\n.question-card input,\n.question-card select,\n.question-card textarea,\n.field input,\n.field select,\n.field textarea,\n.form-group input,\n.form-group select,\n.form-group textarea {\n    margin-top: var(--space-2);\n    margin-bottom: var(--space-2);\n}\n\n/* Helper/instruction text */\n.helper-text,\n.help-text,\n.instruction,\n.field-hint,\n.question-help,\nsmall {\n    margin-top: var(--space-2);\n    margin-bottom: var(--space-2);\n}\n\n/* Conditional follow-up fields */\n.conditional,\n.conditional-field,\n.follow-up,\n.sub-question {\n    margin-top: var(--space-3);\n    margin-bottom: var(--space-3);\n}\n\n/* Two-column grids */\n.grid,\n.form-grid,\n.question-grid,\n.fields-grid,\n.row {\n    row-gap: var(--space-4);\n}\n\n/* Headings inside cards */\n.card h2, .card h3, .card h4,\n.section h2, .section h3, .section h4,\n.business-section h2, .business-section h3, .business-section h4 {\n    margin-top: 0;\n    margin-bottom: var(--space-4);\n}\n\n/* Nested cards: enough breathing room without excessive height */\n.card .card,\n.question-box .question-box,\n.form-section .form-section {\n    margin-top: var(--space-4);\n    margin-bottom: var(--space-4);\n}\n\n/* Buttons/footer */\n.form-actions,\n.navigation-buttons,\n.step-actions,\n.nav-buttons {\n    margin-top: var(--space-6);\n    padding-top: var(--space-5);\n}\n\n/* Mobile: keep the same rhythm but slightly tighter */\n@media (max-width: 768px) {\n    .section, .questionnaire-section, .block, .card,\n    .form-section, .business-section, .usaha-section {\n        margin-top: var(--space-4);\n        margin-bottom: var(--space-4);\n        padding-top: var(--space-4);\n        padding-bottom: var(--space-4);\n    }\n\n    .question-box, .question-card, .field, .form-group {\n        margin-top: var(--space-2);\n        margin-bottom: var(--space-2);\n        padding-top: var(--space-3);\n        padding-bottom: var(--space-3);\n    }\n\n    .grid, .form-grid, .question-grid, .fields-grid, .row {\n        row-gap: var(--space-3);\n    }\n}\n
 
 
+
+
+/* =========================================================
+   POJOK SENSUS — RESPONSIVE SYSTEM V5
+   Target: mobile phones, tablets, laptops, desktops, touch devices
+   Tidak mengubah struktur/conditional logic kuesioner.
+========================================================= */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea {
+  min-width: 0;
+}
+
+/* ---------- Main containers ---------- */
+.container {
+  width: min(1080px, calc(100% - 32px));
+}
+
+.main-content {
+  width: min(1080px, calc(100% - 32px));
+  padding-top: clamp(24px, 4vw, 48px);
+  padding-bottom: clamp(40px, 6vw, 70px);
+}
+
+.form-card,
+.confirmation-card {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(18px, 3vw, 34px);
+}
+
+.section-heading,
+.questionnaire-intro,
+.questionnaire-progress,
+#form3 .form-step,
+#stepQuestionnaire .questionnaire-step {
+  min-width: 0;
+}
+
+/* ---------- Header ---------- */
+.header-content {
+  min-width: 0;
+}
+
+.brand {
+  width: 100%;
+  min-width: 0;
+}
+
+.brand-icon {
+  width: clamp(54px, 10vw, 120px);
+  height: clamp(52px, 8vw, 70px);
+}
+
+.brand-icon img {
+  max-height: clamp(52px, 8vw, 70px);
+}
+
+.brand-text span,
+.brand-text h1 {
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Form grids ---------- */
+.form-grid,
+.address-grid,
+.income-detail-grid {
+  width: 100%;
+  min-width: 0;
+}
+
+.field,
+.question-box,
+.question-group,
+.questionnaire-step,
+.form-step {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.field input,
+.field select,
+.field textarea,
+.question-box input,
+.question-box select,
+.question-box textarea,
+.question-box input[type="file"] {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ---------- Options / radio / checkbox cards ---------- */
+.option-grid,
+.asset-grid,
+.residence-grid,
+.location-mode-options,
+.location-tools,
+.income-option-group {
+  width: 100%;
+  min-width: 0;
+}
+
+.option,
+.asset-item,
+.residence-option,
+.location-mode-option,
+.income-option-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.option label,
+.asset-item label,
+.matrix-option {
+  min-width: 0;
+}
+
+/* ---------- Long text / numbers ---------- */
+.question-box label,
+.question-box .subheading,
+.field label,
+.section-heading h3,
+.section-heading p {
+  overflow-wrap: anywhere;
+}
+
+.question-box textarea,
+.field textarea {
+  max-width: 100%;
+}
+
+/* ---------- Location / map ---------- */
+.geo-section,
+.location-mode-card,
+.location-mode-panel,
+.address-card,
+.location-detail,
+.map-instruction {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+#mapPick {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.location-search-row {
+  min-width: 0;
+}
+
+.location-search-row input {
+  min-width: 0;
+  width: 100%;
+}
+
+.address-suggestions,
+.location-search-results {
+  max-width: 100%;
+}
+
+/* ---------- Business / dynamic questionnaire ---------- */
+.identitas-usaha-list,
+.usaha-section-group,
+.asset-section-group,
+.numbered-question-group {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+#form3 .form-step,
+#stepQuestionnaire .questionnaire-step {
+  overflow: visible;
+}
+
+#form3 .question-box,
+#stepQuestionnaire .question-box {
+  width: 100%;
+  min-width: 0;
+}
+
+#form3 .question-box > *,
+#stepQuestionnaire .question-box > * {
+  max-width: 100%;
+}
+
+/* ---------- Matrix: scroll only the matrix, never the whole page ---------- */
+.matrix-question {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.matrix-table {
+  width: 100%;
+  min-width: 600px;
+}
+
+/* ---------- Footer/actions ---------- */
+.form-footer,
+.form-actions,
+.form-navigation,
+.navigation-buttons,
+.step-actions,
+.nav-buttons {
+  min-width: 0;
+}
+
+.form-footer .btn,
+.form-actions .btn,
+.form-navigation .btn,
+.navigation-buttons .btn,
+.step-actions .btn,
+.nav-buttons .btn {
+  min-width: 0;
+}
+
+/* =========================================================
+   TABLET — 769px sampai 1024px
+========================================================= */
+@media (max-width: 1024px) {
+  .container,
+  .main-content {
+    width: min(100% - 32px, 900px);
+  }
+
+  .form-card,
+  .confirmation-card {
+    padding: 26px;
+  }
+
+  .form-grid {
+    gap: 16px;
+  }
+
+  .questionnaire-intro,
+  .questionnaire-progress {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+
+  #form3 .form-step,
+  #stepQuestionnaire .questionnaire-step {
+    width: calc(100% - 48px);
+    margin-left: 24px;
+    margin-right: 24px;
+    padding: 24px;
+  }
+
+  .questionnaire-progress .progress-container {
+    gap: 8px;
+  }
+
+  .questionnaire-progress .progress-item {
+    gap: 7px;
+  }
+
+  .questionnaire-progress .progress-item strong {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================
+   LARGE MOBILE / SMALL TABLET — 600px sampai 768px
+========================================================= */
+@media (max-width: 768px) {
+  .container,
+  .main-content {
+    width: calc(100% - 28px);
+  }
+
+  .main-content {
+    padding-top: 28px;
+  }
+
+  .site-header .container {
+    width: calc(100% - 28px);
+  }
+
+  .brand {
+    gap: 9px;
+  }
+
+  .brand-text span {
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  .brand-text h1 {
+    font-size: 16px;
+  }
+
+  .intro {
+    margin-bottom: 24px;
+  }
+
+  .intro h2 {
+    font-size: clamp(25px, 7vw, 34px);
+  }
+
+  .progress-container {
+    width: 100%;
+  }
+
+  .form-grid,
+  .address-grid,
+  .income-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .form-grid .full-width,
+  .address-grid .full-width,
+  .income-detail-grid .full-width {
+    grid-column: auto !important;
+  }
+
+  .residence-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .option-grid,
+  .asset-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .location-tools {
+    grid-template-columns: 1fr !important;
+  }
+
+  .location-mode-options {
+    grid-template-columns: 1fr !important;
+  }
+
+  .location-search-row {
+    flex-direction: column;
+  }
+
+  .location-search-row .btn,
+  .search-action-button {
+    width: 100%;
+  }
+
+  .form-footer,
+  .form-actions,
+  .form-navigation,
+  .navigation-buttons,
+  .step-actions,
+  .nav-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-footer .btn,
+  .form-actions .btn,
+  .form-navigation .btn,
+  .navigation-buttons .btn,
+  .step-actions .btn,
+  .nav-buttons .btn {
+    width: 100%;
+  }
+
+  .required-note {
+    width: 100%;
+    margin: 0 !important;
+  }
+
+  /* Progress questionnaire: 4 atas + 3 bawah */
+  .questionnaire-progress .progress-container.questionnaire-progress-container {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px 8px;
+    padding: 12px 8px;
+  }
+
+  .questionnaire-progress .progress-item {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 5px;
+  }
+
+  .questionnaire-progress .progress-item strong,
+  .questionnaire-progress .progress-item small {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .questionnaire-progress .progress-item strong {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .questionnaire-progress .progress-item small {
+    font-size: 9px;
+    line-height: 1.25;
+  }
+
+  .questionnaire-progress .progress-number {
+    width: 31px;
+    height: 31px;
+    flex-basis: 31px;
+    font-size: 11px;
+  }
+
+  #form3 .form-step,
+  #stepQuestionnaire .questionnaire-step {
+    width: calc(100% - 28px);
+    margin-left: 14px;
+    margin-right: 14px;
+    padding: 18px 14px;
+  }
+
+  #form3 .question-box,
+  #stepQuestionnaire .question-box {
+    padding: 14px;
+  }
+
+  #form3 .question-box > label,
+  #form3 .question-box > .subheading,
+  #stepQuestionnaire .question-box > label,
+  #stepQuestionnaire .question-box > .subheading {
+    font-size: 13px;
+  }
+
+  .section-heading {
+    gap: 10px;
+  }
+
+  .section-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .section-heading h3 {
+    font-size: 19px;
+  }
+
+  /* Confirmation table */
+  #confirmDetail .confirmation-row {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+}
+
+/* =========================================================
+   PHONE — <= 480px
+========================================================= */
+@media (max-width: 480px) {
+  .container,
+  .main-content,
+  .site-header .container {
+    width: calc(100% - 20px);
+  }
+
+  .main-content {
+    padding-top: 20px;
+    padding-bottom: 40px;
+  }
+
+  .site-header {
+    position: relative;
+  }
+
+  .header-content {
+    min-height: 58px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .brand-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .brand-icon img {
+    max-height: 48px;
+  }
+
+  .brand-text span {
+    font-size: 7px;
+    letter-spacing: 0.2px;
+  }
+
+  .brand-text h1 {
+    font-size: 15px;
+  }
+
+  .badge {
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.3;
+  }
+
+  .intro h2 {
+    font-size: 25px;
+    letter-spacing: -0.6px;
+  }
+
+  .intro p {
+    font-size: 13px;
+  }
+
+  .form-card,
+  .confirmation-card {
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .section-heading {
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+  }
+
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    font-size: 10px;
+  }
+
+  .section-heading h3 {
+    font-size: 17px;
+  }
+
+  .section-heading p {
+    font-size: 12px;
+  }
+
+  .questionnaire-intro,
+  .questionnaire-progress {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .questionnaire-intro {
+    padding: 12px;
+  }
+
+  #form3 .form-step,
+  #stepQuestionnaire .questionnaire-step {
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 14px 10px;
+    border-radius: 12px;
+  }
+
+  #form3 .question-box,
+  #stepQuestionnaire .question-box {
+    padding: 12px 10px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+
+  #form3 .question-box input[type="text"],
+  #form3 .question-box input[type="number"],
+  #form3 .question-box input[type="date"],
+  #form3 .question-box select,
+  #form3 .question-box textarea,
+  #form3 .checkbox-dropdown-btn,
+  #stepQuestionnaire .question-box input[type="text"],
+  #stepQuestionnaire .question-box input[type="number"],
+  #stepQuestionnaire .question-box input[type="date"],
+  #stepQuestionnaire .question-box select,
+  #stepQuestionnaire .question-box textarea,
+  #stepQuestionnaire .checkbox-dropdown-btn {
+    min-height: 43px;
+    font-size: 13px;
+  }
+
+  .option,
+  .asset-item,
+  .residence-option,
+  .location-mode-option {
+    padding: 11px;
+  }
+
+  .residence-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .residence-option {
+    min-height: 72px;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .questionnaire-progress .progress-container.questionnaire-progress-container {
+    gap: 8px 5px;
+    padding: 10px 5px;
+  }
+
+  .questionnaire-progress .progress-item {
+    gap: 4px;
+  }
+
+  .questionnaire-progress .progress-number {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+    font-size: 10px;
+  }
+
+  .questionnaire-progress .progress-item strong {
+    font-size: 9px;
+  }
+
+  .questionnaire-progress .progress-item small {
+    display: none;
+  }
+
+  .matrix-question {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .matrix-table {
+    min-width: 540px;
+  }
+
+  .matrix-header,
+  .matrix-row {
+    grid-template-columns: minmax(240px, 1fr) 80px 80px;
+  }
+
+  .matrix-header span,
+  .matrix-row > * {
+    padding: 10px 9px;
+  }
+
+  .matrix-label {
+    font-size: 12px;
+  }
+
+  .matrix-option {
+    font-size: 11px;
+  }
+
+  .section-brand-footer {
+    padding: 14px;
+  }
+
+  .section-brand-logo {
+    width: min(170px, 100%);
+    height: auto;
+  }
+
+  /* Landing page */
+  #welcomePage .welcome-shell {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  #welcomePage .welcome-hero {
+    grid-template-columns: 1fr;
+    padding: 22px 18px 16px;
+    border-radius: 0;
+  }
+
+  #welcomePage .welcome-hero-text {
+    max-width: 100%;
+  }
+
+  #welcomePage .welcome-agency {
+    font-size: 8px;
+    letter-spacing: 0.9px;
+  }
+
+  #welcomePage .welcome-hero h1 {
+    font-size: clamp(34px, 12vw, 44px);
+  }
+
+  #welcomePage .welcome-subtitle {
+    font-size: 14px;
+  }
+
+  #welcomePage .welcome-location {
+    font-size: 10px;
+  }
+
+  #welcomePage .welcome-hero-image {
+    height: 86px;
+  }
+
+  #welcomePage .welcome-hero-image img {
+    max-width: 80%;
+    max-height: 82px;
+  }
+
+  #welcomePage .welcome-content {
+    padding: 20px 14px 24px;
+  }
+
+  #welcomePage .welcome-info-card h3 {
+    font-size: 17px;
+  }
+
+  #welcomePage .welcome-info-card > p {
+    font-size: 12px;
+  }
+
+  #welcomePage .welcome-consent-card {
+    padding: 12px;
+  }
+
+  #welcomePage .welcome-document-note {
+    font-size: 11px;
+    padding: 10px;
+  }
+
+  #welcomePage .welcome-consent-check > span:last-child {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================
+   VERY SMALL PHONE — <= 360px
+========================================================= */
+@media (max-width: 360px) {
+  .container,
+  .main-content,
+  .site-header .container {
+    width: calc(100% - 14px);
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .brand-icon img {
+    max-height: 42px;
+  }
+
+  .brand-text span {
+    font-size: 6.5px;
+  }
+
+  .brand-text h1 {
+    font-size: 13px;
+  }
+
+  .questionnaire-intro,
+  .questionnaire-progress {
+    margin-left: 7px;
+    margin-right: 7px;
+  }
+
+  #form3 .form-step,
+  #stepQuestionnaire .questionnaire-step {
+    width: calc(100% - 14px);
+    margin-left: 7px;
+    margin-right: 7px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  #form3 .question-box,
+  #stepQuestionnaire .question-box {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .questionnaire-progress .progress-container.questionnaire-progress-container {
+    gap: 6px 3px;
+  }
+
+  .questionnaire-progress .progress-number {
+    width: 25px;
+    height: 25px;
+    flex-basis: 25px;
+  }
+
+  .questionnaire-progress .progress-item strong {
+    font-size: 8px;
+  }
+
+  .matrix-table {
+    min-width: 500px;
+  }
+}
+
+/* =========================================================
+   TOUCH DEVICES / LANDSCAPE PHONES
+========================================================= */
+@media (hover: none) and (pointer: coarse) {
+  .btn,
+  .option,
+  .asset-item,
+  .residence-option,
+  .location-mode-option,
+  .matrix-option,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  .btn {
+    touch-action: manipulation;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .main-content {
+    padding-top: 18px;
+    padding-bottom: 30px;
+  }
+
+  #welcomePage .welcome-hero {
+    grid-template-columns: 1.15fr 0.85fr;
+    padding: 16px 20px;
+  }
+
+  #welcomePage .welcome-hero-image {
+    height: 90px;
+  }
+
+  #welcomePage .welcome-hero-image img {
+    max-height: 100px;
+  }
+}
+
+/* Prevent flex/grid children from creating accidental horizontal scroll. */
+.form-grid > *,
+.address-grid > *,
+.option-grid > *,
+.asset-grid > *,
+.income-detail-grid > *,
+.location-mode-options > *,
+.location-tools > *,
+.section-heading > *,
+.form-footer > *,
+.form-navigation > * {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   FINAL MOBILE MATRIX / SUBQUESTION FIX
+   Nomor subpertanyaan dan pilihan Ya/Tidak tidak boleh
+   pecah menjadi karakter/baris terpisah.
+========================================================= */
+#form3 .subquestion-number {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 22px !important;
+    margin-right: 5px !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+}
+
+#form3 .matrix-label {
+    display: flex !important;
+    align-items: flex-start !important;
+    min-width: 0 !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+}
+
+#form3 .matrix-label .subquestion-number {
+    flex: 0 0 22px !important;
+    width: 22px !important;
+    min-width: 22px !important;
+    white-space: nowrap !important;
+}
+
+#form3 .matrix-option {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+}
+
+#form3 .matrix-option input {
+    flex: 0 0 17px !important;
+    width: 17px !important;
+    min-width: 17px !important;
+    height: 17px !important;
+}
+
+#form3 .matrix-option > span {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+}
+
+/* =========================================================
+   FINAL FIX — OPTION GROUP / RADIO OPTIONS
+   Semua .option-group menjaga radio + teks tetap sejajar
+   dan pilihan tidak berubah menjadi kartu vertikal.
+========================================================= */
+#form3 .option-group {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+#form3 .option-group > .option {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+}
+
+#form3 .option-group > .option > input[type="radio"],
+#form3 .option-group > .option > input[type="checkbox"] {
+    flex: 0 0 auto !important;
+    width: 18px !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+}
+
+#form3 .option-group > .option > span {
+    display: inline-block !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.4 !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+}
+
+@media (max-width: 380px) {
+    #form3 .option-group {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    #form3 .option-group > .option {
+        padding: 10px !important;
+        gap: 6px !important;
+    }
+
+    #form3 .option-group > .option > input[type="radio"],
+    #form3 .option-group > .option > input[type="checkbox"] {
+        width: 17px !important;
+        min-width: 17px !important;
+        height: 17px !important;
+    }
+}
+
+/* =========================================================
+   REVISI POJOK SENSUS — JARAK ANTAR QUESTION-BOX
+   Menjaga setiap question-box tidak saling menempel.
+========================================================= */
+#form3 .question-box {
+    margin-bottom: 20px !important;
+}
+
+/* Untuk question-box yang berada dalam grid, jarak vertikal
+   diatur oleh row-gap agar konsisten dan tidak terhimpit. */
+#form3 .form-grid,
+#form3 .option-grid,
+#form3 .asset-grid,
+#form3 .income-detail-grid {
+    row-gap: 20px !important;
+}
+
+#form3 .form-grid > .question-box,
+#form3 .income-detail-grid > .question-box {
+    margin-bottom: 0 !important;
+}
+
+/* Jarak antar question-box yang tersusun vertikal. */
+#form3 .question-box + .question-box {
+    margin-top: 0 !important;
+}
+
+/* Tetap beri ruang pada question-box di dalam question-group/subbagian. */
+#form3 .question-group .question-box,
+#form3 .usaha-subsection-card > .question-box,
+#form3 .usaha-subsection-card > .form-grid > .question-box,
+#form3 .usaha-subsection-card .conditional-field > .question-box {
+    margin-bottom: 20px !important;
+}
+
+#form3 .question-group .question-box:last-child,
+#form3 .usaha-subsection-card > .question-box:last-child,
+#form3 .usaha-subsection-card > .form-grid > .question-box:last-child,
+#form3 .usaha-subsection-card .conditional-field > .question-box:last-child {
+    margin-bottom: 0 !important;
+}
+
+@media (max-width: 900px) {
+    #form3 .form-grid,
+    #form3 .income-detail-grid {
+        row-gap: 18px !important;
+    }
+}
+
+/* =========================================================
+   BLOK D - MATRIX USAHA PERTANIAN: COMPACT ROW FINAL
+   Visual/layout only. Tidak mengubah JS, id, name, value,
+   data-matrix-target, conditional logic, atau validation.
+========================================================= */
+.usaha-pertanian-matrix .matrix-row {
+  display: block !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-bottom: 1px solid #edf1f2;
+}
+
+.usaha-pertanian-matrix .matrix-topline {
+  display: grid !important;
+  grid-template-columns: minmax(280px, 1fr) 90px 90px !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Kiri/kanan baris atas = 14px */
+.usaha-pertanian-matrix .matrix-label-main {
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 8px 14px !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+}
+
+.usaha-pertanian-matrix .matrix-option {
+  min-width: 0 !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 6px 14px !important;
+  align-self: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  white-space: nowrap !important;
+  font-size: 12px !important;
+}
+
+.usaha-pertanian-matrix .matrix-option input {
+  flex: 0 0 17px !important;
+  width: 17px !important;
+  min-width: 17px !important;
+  height: 17px !important;
+  margin: 0 !important;
+}
+
+/* Detail tepat di bawah nama usaha, dengan padding kiri/kanan sama */
+.usaha-pertanian-matrix .matrix-detail {
+  display: block !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 14px 6px !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+/* Field jumlah usaha: full width matrix, tetapi compact */
+.usaha-pertanian-matrix .quantity-usaha-field {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 14px 9px !important;
+}
+
+.usaha-pertanian-matrix .quantity-usaha-field label {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+.usaha-pertanian-matrix .quantity-usaha-field input {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 700px) {
+  .usaha-pertanian-matrix .matrix-table {
+    min-width: 540px !important;
+  }
+
+  .usaha-pertanian-matrix .matrix-topline {
+    grid-template-columns: minmax(250px, 1fr) 80px 80px !important;
+  }
+
+  .usaha-pertanian-matrix .matrix-label-main,
+  .usaha-pertanian-matrix .matrix-detail,
+  .usaha-pertanian-matrix .quantity-usaha-field {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
+
+  .usaha-pertanian-matrix .matrix-option {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+    font-size: 11px !important;
+  }
+}
+
+/* =========================================================
+   FINAL FIX: CONDITIONAL JUMLAH USAHA
+   Hidden state must win over the matrix display rule.
+   JavaScript logic remains unchanged.
+========================================================= */
+.usaha-pertanian-matrix .quantity-usaha-field.hidden {
+  display: none !important;
+}
+
+.usaha-pertanian-matrix .quantity-usaha-field:not(.hidden) {
+  display: block !important;
+}
+
+
+/* =========================================================
+   BLOK 03 - DETAIL ALAMAT: KECAMATAN + DESA/KELURAHAN
+   Keduanya berada dalam satu baris pada address-grid.
+   Desa/Kelurahan Lainnya mengikuti lebar area dalam address-card.
+========================================================= */
+.address-grid > .field#fDesa,
+.address-grid > .field:has(> label[for="fDesa"]) {
+  grid-column: auto;
+  min-width: 0;
+}
+
+.address-grid > #desaLainnyaField {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 4px 0 0;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.address-grid > #desaLainnyaField > label {
+  display: block;
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.address-grid > #desaLainnyaField > label > strong:first-child {
+  margin-right: 6px;
+}
+
+.address-grid > #desaLainnyaField > input {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .address-grid > #desaLainnyaField {
+    grid-column: 1 / -1;
+    padding-top: 10px;
+  }
+}
+
+/* =========================================================
+   DROPDOWN ARROW - POSISI KONSISTEN
+   Satu icon saja, termasuk saat select disabled.
+========================================================= */
+.form-select,
+.field select,
+.question-box select,
+#form3 select,
+#stepQuestionnaire select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 16px 16px !important;
+    padding-right: 42px !important;
+}
+
+.form-select:disabled,
+.field select:disabled,
+.question-box select:disabled,
+#form3 select:disabled,
+#stepQuestionnaire select:disabled {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 16px 16px !important;
+}

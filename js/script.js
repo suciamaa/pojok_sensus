@@ -1,3 +1,64 @@
+
+/* Pojok Sensus: high-accuracy geolocation.
+   Browser/device accuracy is not forceable; coordinates are accepted only when
+   the reported accuracy is <= 5 m. The watcher keeps trying for a better fix. */
+const MAX_ACCEPTED_GEO_ACCURACY = 5;
+const HIGH_ACCURACY_GEO_OPTIONS = {
+    enableHighAccuracy: true,
+    maximumAge: 0,
+    timeout: 15000
+};
+
+function getHighAccuracyPosition(onSuccess, onError) {
+    if (!navigator.geolocation) {
+        if (typeof onError === "function") onError(new Error("Geolocation tidak didukung browser."));
+        return null;
+    }
+
+    let bestAccuracy = Infinity;
+    let settled = false;
+    let watchId = null;
+    const startedAt = Date.now();
+    const maxWait = 60000;
+
+    const finish = (position) => {
+        if (settled) return;
+        const accuracy = Number(position?.coords?.accuracy);
+        if (!Number.isFinite(accuracy)) return;
+
+        if (accuracy <= MAX_ACCEPTED_GEO_ACCURACY) {
+            settled = true;
+            if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+            onSuccess(position);
+        } else if (accuracy < bestAccuracy) {
+            bestAccuracy = accuracy;
+        }
+
+        if (Date.now() - startedAt >= maxWait && !settled) {
+            settled = true;
+            if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+            const err = new Error(
+                `Akurasi lokasi masih ${Math.round(bestAccuracy)} m. ` +
+                `Silakan aktifkan GPS/lokasi presisi tinggi dan coba lagi.`
+            );
+            err.code = 3;
+            err.accuracy = bestAccuracy;
+            if (typeof onError === "function") onError(err);
+        }
+    };
+
+    watchId = navigator.geolocation.watchPosition(
+        finish,
+        (err) => {
+            if (settled) return;
+            if (typeof onError === "function") onError(err);
+        },
+        HIGH_ACCURACY_GEO_OPTIONS
+    );
+
+    return watchId;
+}
+
 /* Google Maps loader bridge: safe even if the async API finishes before DOMContentLoaded. */
 window.__googleMapsLoaded = false;
 window.initGoogleMaps = function () {
@@ -90,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "Pendidikan Linguistik (S2)",
             "Pendidikan Matematika (S1)",
             "Pendidikan Matematika (S2)",
-            "Pendidikan Nonformal (S1)",
+            "Pendidikan Masyarakat (S1)",
             "Pendidikan Olahraga (S2)",
             "Pendidikan Pancasila dan Kewarganegaraan (S1)",
             "Pendidikan Sejarah (S1)",
@@ -902,7 +963,174 @@ const fDesa = document.getElementById("fDesa");
 const fKecamatan = document.getElementById("fKecamatan");
 const fKabupaten = document.getElementById("fKabupaten");
 const fKodePos = document.getElementById("fKodePos");
+const desaLainnyaField = document.getElementById("desaLainnyaField");
+const desaLainnya = document.getElementById("desaLainnya");
 const questionError = document.getElementById("questionError");
+
+/* =========================================================
+   BLOK 03 — KECAMATAN → DESA/KELURAHAN
+========================================================= */
+const desaData = {
+    "indralaya": [
+        "005. Lubuk Sakti", "006. Tanjung Gelam", "007. Tanjung Agung",
+        "008. Ulak Bedil", "010. Sudi Mampir", "011. Penyandingan",
+        "012. Talang Aur", "013. Ulak Banding", "014. Muara Penimbung Ulu",
+        "015. Sakatiga", "016. Tanjung Sejaro", "017. Sakatiga Seberang",
+        "019. Tanjung Seteko", "027. Ulak Segelung", "028. Indralaya Mulya",
+        "029. Indralaya Raya", "030. Indralaya Indah", "031. Muara Penimbung Ilir",
+        "032. Tunas Aur", "033. Sejaro Sakti"
+    ],
+    "indralaya utara": [
+        "001. Bakung", "002. Lorok", "003. Parit", "004. Purnajaya",
+        "005. Payakabung", "006. Tanjung Baru", "007. Tanjung Pering",
+        "008. Sungai Rambutan", "009. Suak Batok", "010. Timbangan",
+        "011. Suka Mulia", "012. Pulau Kabal", "013. Tanjung Pule",
+        "014. Permata Baru", "015. Palem Raya", "016. Pulau Semambu"
+    ],
+    "indralaya selatan": [
+        "001. Tanjung Dayang Selatan", "002. Mandi Angin", "003. Sukaraja Baru",
+        "004. Sukaraja Lama", "005. Tanjung Lubuk", "006. Beti",
+        "007. Meranjat Ilir", "008. Meranjat II", "009. Meranjat I",
+        "010. Tebing Gerinting Selatan", "011. Arisan Gading", "012. Meranjat III",
+        "013. Tebing Gerinting Utara", "014. Tanjung Dayang Utara"
+    ]
+};
+
+function hideDesaLainnya() {
+    desaLainnyaField?.classList.add("hidden");
+    if (desaLainnya) {
+        desaLainnya.value = "";
+        desaLainnya.classList.remove("valid", "invalid");
+    }
+}
+
+function showDesaLainnya() {
+    desaLainnyaField?.classList.remove("hidden");
+}
+
+function populateDesaOptions(kecamatan, selectedDesa = "") {
+    if (!fDesa) return;
+    fDesa.innerHTML = "";
+
+    if (!kecamatan || !desaData[kecamatan]) {
+        fDesa.disabled = true;
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "Pilih kecamatan terlebih dahulu";
+        fDesa.appendChild(option);
+        hideDesaLainnya();
+        return;
+    }
+
+    fDesa.disabled = false;
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Pilih desa/kelurahan";
+    fDesa.appendChild(defaultOption);
+
+    desaData[kecamatan].forEach(desa => {
+        const option = document.createElement("option");
+        option.value = desa;
+        option.textContent = desa;
+        fDesa.appendChild(option);
+    });
+
+    const lainnyaOption = document.createElement("option");
+    lainnyaOption.value = "lainnya";
+    lainnyaOption.textContent = "Lainnya";
+    fDesa.appendChild(lainnyaOption);
+
+    if (selectedDesa === "lainnya") {
+        fDesa.value = "lainnya";
+        showDesaLainnya();
+    } else if (selectedDesa) {
+        const match = Array.from(fDesa.options).find(opt => opt.value.toLowerCase() === String(selectedDesa).toLowerCase());
+        if (match) fDesa.value = match.value;
+    }
+}
+
+function resetDesaByKecamatan() {
+    populateDesaOptions("");
+}
+
+function normalizeLocationName(value) {
+    return String(value || "")
+        .toLowerCase()
+        .replace(/^\d+\.\s*/, "")
+        .trim();
+}
+
+function setKecamatanFromExternal(value, villageValue = "") {
+    if (!fKecamatan) return;
+    const normalized = normalizeLocationName(value);
+    const option = Array.from(fKecamatan.options).find(opt =>
+        normalizeLocationName(opt.value) === normalized ||
+        normalizeLocationName(opt.textContent) === normalized
+    );
+
+    if (!option || !option.value) {
+        fKecamatan.value = "";
+        resetDesaByKecamatan();
+        return;
+    }
+
+    fKecamatan.value = option.value;
+    populateDesaOptions(option.value);
+
+    if (villageValue) {
+        const villageNormalized = normalizeLocationName(villageValue);
+        const villageOption = Array.from(fDesa.options).find(opt =>
+            opt.value !== "lainnya" &&
+            (normalizeLocationName(opt.value) === villageNormalized || normalizeLocationName(opt.textContent) === villageNormalized)
+        );
+
+        if (villageOption) {
+            fDesa.value = villageOption.value;
+            hideDesaLainnya();
+        } else {
+            fDesa.value = "lainnya";
+            if (desaLainnya) desaLainnya.value = villageValue;
+            showDesaLainnya();
+        }
+    }
+}
+
+function getDesaFormValue() {
+    if (fDesa?.value === "lainnya") return desaLainnya?.value?.trim() || "";
+    return fDesa?.value?.trim() || "";
+}
+
+function initializeKecamatanDesaFields() {
+    if (!fKecamatan || !fDesa) return;
+
+    populateDesaOptions(fKecamatan.value || "");
+    hideDesaLainnya();
+
+    fKecamatan.addEventListener("change", function () {
+        hideDesaLainnya();
+        populateDesaOptions(fKecamatan.value);
+    });
+
+    fDesa.addEventListener("change", function () {
+        if (fDesa.value === "lainnya") {
+            showDesaLainnya();
+        } else {
+            hideDesaLainnya();
+        }
+
+        if (selectedLatLng) {
+            updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
+        }
+    });
+
+    desaLainnya?.addEventListener("input", function () {
+        if (selectedLatLng) {
+            updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
+        }
+    });
+}
+
+initializeKecamatanDesaFields();
 
 const OGAN_ILIR_CENTER = { lat: -3.2647, lng: 104.6535 };
 const OGAN_ILIR_BOUNDS = {
@@ -1029,7 +1257,7 @@ function scheduleAddressSuggest() {
 
 function canGeocodeFromFields() {
     const alamat = fAlamat?.value.trim() || "";
-    const desa = fDesa?.value.trim() || "";
+    const desa = getDesaFormValue();
     const kecamatan = fKecamatan?.value.trim() || "";
     return alamat.length >= 5 && (desa.length >= 2 || kecamatan.length >= 2);
 }
@@ -1039,7 +1267,7 @@ function buildAddressQuery() {
         fAlamat?.value.trim(),
         fRt?.value.trim() ? `RT ${fRt.value.trim()}` : "",
         fRw?.value.trim() ? `RW ${fRw.value.trim()}` : "",
-        fDesa?.value.trim(),
+        getDesaFormValue(),
         fKecamatan?.value.trim(),
         fKabupaten?.value.trim() || "Ogan Ilir",
         "Sumatera Selatan",
@@ -1066,7 +1294,7 @@ function updateLocationDetailFromForm(lat, lng) {
     const alamat = fAlamat?.value.trim() || "";
     const rt = fRt?.value.trim() || "";
     const rw = fRw?.value.trim() || "";
-    const desa = fDesa?.value.trim() || "";
+    const desa = getDesaFormValue();
     const kecamatan = fKecamatan?.value.trim() || "";
     const kabupaten = fKabupaten?.value.trim() || "Ogan Ilir";
     const kodePos = fKodePos?.value.trim() || "";
@@ -1164,10 +1392,8 @@ function applyAddressSuggestion(result) {
     }
 
     const village = getAddressComponent(address, ["village", "suburb", "town", "municipality"]);
-    if (village) fDesa.value = village;
-
-    const district = getAddressComponent(address, ["county", "city_district", "district"]);
-    if (district) fKecamatan.value = district;
+    const district = getAddressComponent(address, ["city_district", "district", "municipality", "county"]);
+    if (district) setKecamatanFromExternal(district, village);
 
     fKabupaten.value = "Ogan Ilir";
     if (address.postcode) fKodePos.value = address.postcode;
@@ -1326,18 +1552,15 @@ function applyReverseAddress(result, options = {}) {
     const road = getAddressComponent(address, ["road", "pedestrian", "footway"]);
     const houseNumber = address.house_number || "";
     const village = getAddressComponent(address, ["village", "suburb", "town", "municipality"]);
-    const district = getAddressComponent(address, ["county", "city_district", "district"]);
+    const district = getAddressComponent(address, ["city_district", "district", "municipality", "county"]);
     const postcode = address.postcode || "";
 
     suppressAddressGeocode = true;
     if (overwrite || !(fAlamat?.value.trim())) {
         if (road || houseNumber) fAlamat.value = [road, houseNumber].filter(Boolean).join(" ");
     }
-    if (overwrite || !(fDesa?.value.trim())) {
-        if (village) fDesa.value = village;
-    }
-    if (overwrite || !(fKecamatan?.value.trim())) {
-        if (district) fKecamatan.value = district;
+    if (district && (overwrite || !(fKecamatan?.value.trim()))) {
+        setKecamatanFromExternal(district, village);
     }
     fKabupaten.value = "Ogan Ilir";
     if (overwrite || !(fKodePos?.value.trim())) {
@@ -1348,7 +1571,7 @@ function applyReverseAddress(result, options = {}) {
     selectedLocation = result;
     selectedLocationName.textContent = fNamaTempat?.value.trim() || result.name || "Lokasi terpilih";
     selectedFullAddress.textContent = buildAddressQuery() || result.display_name || "—";
-    coordDesa.textContent = fDesa.value.trim() || "—";
+    coordDesa.textContent = getDesaFormValue() || "—";
     coordKec.textContent = fKecamatan.value.trim() || "—";
     coordKabupaten.textContent = "Ogan Ilir";
     coordKodePos.textContent = fKodePos.value.trim() || "—";
@@ -1783,7 +2006,7 @@ function validateLocationStep() {
     fields.forEach(([field, errorId, test]) => {
         if (!field) return;
 
-        const value = field.value.trim();
+        const value = field === fDesa ? getDesaFormValue() : field.value.trim();
         const fieldValid = test(value);
 
         setFieldState(field, fieldValid);
@@ -1793,6 +2016,13 @@ function validateLocationStep() {
             valid = false;
         }
     });
+
+    if (fDesa?.value === "lainnya") {
+        const customDesaValid = getDesaFormValue().length >= 2;
+        setFieldState(desaLainnya, customDesaValid);
+        showError("errDesa", !customDesaValid);
+        if (!customDesaValid) valid = false;
+    }
 
     const kabupatenValid =
         (fKabupaten?.value || "").trim().toLowerCase() === "ogan ilir";
@@ -1861,7 +2091,7 @@ async function saveProfileBeforeQuestionnaire() {
         alamat: fAlamat?.value?.trim() || "",
         rt: fRt?.value?.trim() || "",
         rw: fRw?.value?.trim() || "",
-        desa: fDesa?.value?.trim() || "",
+        desa: getDesaFormValue(),
         kecamatan: fKecamatan?.value?.trim() || "",
         kabupaten: "Ogan Ilir",
         kodePos: fKodePos?.value?.trim() || "",
@@ -1878,7 +2108,7 @@ async function saveProfileBeforeQuestionnaire() {
     const fd = new FormData();
     Object.entries(main).forEach(([key, value]) => fd.append(key, value ?? ""));
 
-    const response = await fetch("api/save_profile.php", { method: "POST", body: fd });
+    const response = await fetch("api/save_profile", { method: "POST", body: fd });
     const result = await response.json().catch(() => ({ success: false, message: "Respons server tidak valid." }));
     if (!response.ok || !result.success) {
         throw new Error(result.message || "Data tahap 1–3 gagal disimpan.");
@@ -2028,9 +2258,13 @@ if (resetBtn) {
         // Mulai responden baru: buang draft, id_key, dan jawaban responden sebelumnya.
         try { localStorage.removeItem("sensusEkonomiMahasiswaDraft"); } catch {}
 
-        [fNim, fAngkatan, fNama, fHp, fNamaTempat, fAlamat, fRt, fRw, fDesa, fKecamatan, fKodePos].forEach(field => {
+        [fNim, fAngkatan, fNama, fHp, fNamaTempat, fAlamat, fRt, fRw, fKodePos].forEach(field => {
             if (field) field.value = "";
         });
+        if (fKecamatan) fKecamatan.value = "";
+        resetDesaByKecamatan();
+        if (desaLainnya) desaLainnya.value = "";
+        hideDesaLainnya();
         if (fKabupaten) fKabupaten.value = "Ogan Ilir";
         fFakultas.value = "";
         fProdi.innerHTML = '<option value="">Pilih fakultas terlebih dahulu</option>';

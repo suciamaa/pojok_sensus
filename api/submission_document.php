@@ -141,7 +141,7 @@ try {
     <section class="success">
         <div class="success-mark">✓</div>
         <h2>Data Berhasil Dicatat</h2>
-        <p>Selamat kamu sudah berhasil mengisi sensus untuk mahasiswa Universitas Sriwijaya yang berdomisili di Indralaya</p>
+        <p>Selamat kamu sudah berhasil mengisi kuesioner Pojok Sensus. Terima kasih atas partisipasinya🤗🙏</p>
     </section>
 
     <div class="section-title">Data Registrasi Awal</div>
@@ -180,7 +180,7 @@ try {
         <span>*Syarat dan Ketentuan berlaku</span>
     </div>
 
-    <div class="footer">Dokumen ini merupakan bukti bahwa Form 3 Pojok Sensus telah berhasil dikirimkan.</div>
+    <div class="footer">Dokumen ini merupakan bukti bahwa Pengisian Pojok Sensus kamu telah berhasil dikirimkan.</div>
 </main>
 </body>
 </html>

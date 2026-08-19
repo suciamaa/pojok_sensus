@@ -83,8 +83,8 @@
 <input id="consentYes" type="checkbox"/>
 <span class="welcome-checkbox"></span>
 <span>
-<strong>Saya menyatakan bahwa saya memenuhi kriteria tersebut
-                            dan bersedia melanjutkan pengisian kuesioner.</strong>
+<strong>Saya menyatakan bahwa saya memenuhi kriteria
+                            dan bersedia melanjutkan pengisian kuesioner</strong>
 </span>
 </label>
 <button class="welcome-next-btn" id="startFormBtn" type="button">
@@ -486,15 +486,41 @@
 <input id="fRw" inputmode="numeric" maxlength="5" placeholder="Contoh: 02" type="text"/>
 <div class="error-message" id="errRw">Isi RW dengan angka.</div>
 </div>
-<div class="field full-width">
-<label for="fDesa">Desa / Kelurahan <span class="required">*</span></label>
-<input id="fDesa" maxlength="100" placeholder="Contoh: Timbangan" type="text"/>
-<div class="error-message" id="errDesa">Isi desa/kelurahan.</div>
-</div>
+<!-- Kecamatan -->
 <div class="field">
-<label for="fKecamatan">Kecamatan <span class="required">*</span></label>
-<input id="fKecamatan" maxlength="100" placeholder="Contoh: Indralaya Utara" type="text"/>
-<div class="error-message" id="errKecamatan">Isi kecamatan.</div>
+<label for="fKecamatan">
+Kecamatan
+<span class="required">*</span>
+</label>
+<select id="fKecamatan">
+<option value="">Pilih Kecamatan</option>
+<option value="indralaya">060. Indralaya</option>
+<option value="indralaya utara">061. Indralaya Utara</option>
+<option value="indralaya selatan">062. Indralaya Selatan</option>
+</select>
+<div class="error-message" id="errKecamatan">Pilih kecamatan terlebih dahulu.</div>
+</div>
+
+<!-- Desa/Kelurahan -->
+<div class="field">
+<label for="fDesa">
+Desa/Kelurahan
+<span class="required">*</span>
+</label>
+<select id="fDesa" disabled>
+<option value="">Pilih kecamatan terlebih dahulu</option>
+</select>
+<div class="field-hint">Pilih kecamatan terlebih dahulu.</div>
+<div class="error-message" id="errDesa">Pilih desa/kelurahan terlebih dahulu.</div>
+</div>
+
+<!-- Desa/Kelurahan Lainnya -->
+<div class="question-box conditional-field hidden full-width" id="desaLainnyaField">
+<label for="desaLainnya">
+Tuliskan desa/kelurahan lainnya
+<span aria-label="Wajib diisi" class="required">*</span>
+</label>
+<input type="text" id="desaLainnya" name="desaLainnya" placeholder="Tuliskan nama desa/kelurahan" data-required="true">
 </div>
 <div class="field">
 <label for="fKabupaten">Kabupaten</label>
@@ -578,7 +604,7 @@
 </div>
 <div class="questionnaire-intro">
 <div class="field-hint">Jawaban kuesioner tidak disimpan otomatis. Data akan disimpan saat Anda menekan tombol Kirim.</div>
-<div class="field-hint" id="saveStatus">Belum dikirim</div>
+<div class="field-hint" id="saveStatus">Silahkan Lengkapi Pertanyaan</div>
 </div>
 <div class="questionnaire-progress">
 <div class="progress-container questionnaire-progress-container">
@@ -626,7 +652,7 @@
 <div class="progress-item" data-progress="6">
 <div class="progress-number">F</div>
 <div>
-<strong>Rumah</strong>
+<strong>Tempat Tinggal</strong>
 <small>Fasilitas</small>
 </div>
 </div>
@@ -886,7 +912,7 @@
 <div class="question-box matrix-question">
 <label><strong>6.</strong>
     Apakah memiliki keterbatasan dalam jangka waktu lama sehingga mengalami 
-    kesulitan dalam <br> menjalankan aktivitas sehari-hari?
+    kesulitan dalam menjalankan aktivitas sehari-hari?
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <div class="matrix-table">
@@ -1300,191 +1326,156 @@
 </div>
 </div>
 </div></div>
-<div class="question-group numbered-question-group"><h4 class="subheading"><strong>2.</strong>Identifikasi Usaha Pertanian yang Dilakukan Keluarga (Iya, Tidak)</h4><div class="form-grid">
-<div class="question-box full-width">
-<label for="identPertanianTanamanPangan"><strong>a.</strong>
-            Apakah anda selama setahun yang lalu mengelola usaha <span class="question-highlight-red">Tanaman Pangan</span> dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
+<div class="question-box matrix-question usaha-pertanian-matrix" id="identifikasiUsahaPertanianMatrix">
+<h4 class="subheading"><strong>2.</strong>Identifikasi Usaha Pertanian yang Dilakukan Keluarga (Iya, Tidak)</h4>
+<p class="matrix-intro">
+    Apakah anda selama setahun yang lalu mengelola usaha di bawah ini dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
+</p>
+<div class="matrix-table">
+<div class="matrix-header"><span>Jenis usaha pertanian</span><span>Iya</span><span>Tidak</span></div>
+
+<div class="matrix-row">
+    <div class="matrix-topline">
+        <span class="matrix-label-main"><span aria-hidden="true" class="subquestion-number">a.</span>Tanaman Pangan</span>
+        <label class="matrix-option"><input aria-label="Tanaman Pangan - Iya" class="matrix-ui-radio" data-matrix-target="identPertanianTanamanPangan" type="radio" value="ya" /><span>Iya</span></label>
+        <label class="matrix-option"><input aria-label="Tanaman Pangan - Tidak" class="matrix-ui-radio" data-matrix-target="identPertanianTanamanPangan" type="radio" value="tidak" /><span>Tidak</span></label>
+    </div>
+    <div class="matrix-detail">Termasuk yang seluruhnya dikonsumsi sendiri (padi, jagung, kedelai, kacang tanah, kacang hijau, ubi kayu, ubi jalar, talas, ganyong, dan palawija lainnya).</div>
+    <select class="form-select matrix-source-select" data-required="true" id="identPertanianTanamanPangan" name="identPertanianTanamanPangan" aria-label="Tanaman Pangan" required="">
+        <option value="">Pilih jawaban</option>
+        <option value="ya">Iya</option>
+        <option value="tidak">Tidak</option>
+    </select>
+    <div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianTanamanPangan">
+        <label for="jumlahUsaha_identPertanianTanamanPangan">
+            Tuliskan Jumlah Usaha
             <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<div class="field-hint">Termasuk yang seluruhnya dikonsumsi sendiri (padi, jagung, kedelai, kacang tanah, kacang hijau, ubi kayu, ubi jalar, talas, ganyong, dan palawija lainnya).</div>
-<select class="form-select" data-required="true" id="identPertanianTanamanPangan" name="identPertanianTanamanPangan" required="">
-<option value="">Pilih jawaban</option>
-<option value="ya">Iya</option>
-<option value="tidak">Tidak</option>
-</select>
-<div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianTanamanPangan">
-    <label for="jumlahUsaha_identPertanianTanamanPangan">
-        Tuliskan Jumlah Usaha
-        <span aria-label="Wajib diisi" class="required">*</span>
-    </label>
-    <input
-        data-required="true"
-        id="jumlahUsaha_identPertanianTanamanPangan"
-        inputmode="numeric"
-        min="1"
-        name="jumlahUsaha_identPertanianTanamanPangan"
-        placeholder="Jumlah usaha"
-        type="number"
-    />
+        </label>
+        <input data-required="true" id="jumlahUsaha_identPertanianTanamanPangan" inputmode="numeric" min="1" name="jumlahUsaha_identPertanianTanamanPangan" placeholder="Jumlah usaha" type="number" />
+    </div>
 </div>
-</div>
-<div class="question-box">
-<label for="identPertanianHortikultura"><strong>b.</strong>
-            Apakah anda selama setahun yang lalu mengelola usaha <span class="question-highlight-red">Hortikultura</span> dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
+
+<div class="matrix-row">
+    <div class="matrix-topline">
+        <span class="matrix-label-main"><span aria-hidden="true" class="subquestion-number">b.</span>Hortikultura</span>
+        <label class="matrix-option"><input aria-label="Hortikultura - Iya" class="matrix-ui-radio" data-matrix-target="identPertanianHortikultura" type="radio" value="ya" /><span>Iya</span></label>
+        <label class="matrix-option"><input aria-label="Hortikultura - Tidak" class="matrix-ui-radio" data-matrix-target="identPertanianHortikultura" type="radio" value="tidak" /><span>Tidak</span></label>
+    </div>
+    <select class="form-select matrix-source-select" data-required="true" id="identPertanianHortikultura" name="identPertanianHortikultura" aria-label="Hortikultura" required="">
+        <option value="">Pilih jawaban</option>
+        <option value="ya">Iya</option>
+        <option value="tidak">Tidak</option>
+    </select>
+    <div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianHortikultura">
+        <label for="jumlahUsaha_identPertanianHortikultura">
+            Tuliskan Jumlah Usaha
             <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<select class="form-select" data-required="true" id="identPertanianHortikultura" name="identPertanianHortikultura" required="">
-<option value="">Pilih jawaban</option>
-<option value="ya">Iya</option>
-<option value="tidak">Tidak</option>
-</select>
-<div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianHortikultura">
-    <label for="jumlahUsaha_identPertanianHortikultura">
-        Tuliskan Jumlah Usaha
-        <span aria-label="Wajib diisi" class="required">*</span>
-    </label>
-    <input
-        data-required="true"
-        id="jumlahUsaha_identPertanianHortikultura"
-        inputmode="numeric"
-        min="1"
-        name="jumlahUsaha_identPertanianHortikultura"
-        placeholder="Jumlah usaha"
-        type="number"
-    />
+        </label>
+        <input data-required="true" id="jumlahUsaha_identPertanianHortikultura" inputmode="numeric" min="1" name="jumlahUsaha_identPertanianHortikultura" placeholder="Jumlah usaha" type="number" />
+    </div>
 </div>
-</div>
-<div class="question-box">
-<label for="identPertanianPerkebunan"><strong>c.</strong>
-            Apakah anda selama setahun yang lalu mengelola usaha <span class="question-highlight-red">Perkebunan</span> dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
+
+<div class="matrix-row">
+    <div class="matrix-topline">
+        <span class="matrix-label-main"><span aria-hidden="true" class="subquestion-number">c.</span>Perkebunan</span>
+        <label class="matrix-option"><input aria-label="Perkebunan - Iya" class="matrix-ui-radio" data-matrix-target="identPertanianPerkebunan" type="radio" value="ya" /><span>Iya</span></label>
+        <label class="matrix-option"><input aria-label="Perkebunan - Tidak" class="matrix-ui-radio" data-matrix-target="identPertanianPerkebunan" type="radio" value="tidak" /><span>Tidak</span></label>
+    </div>
+    <select class="form-select matrix-source-select" data-required="true" id="identPertanianPerkebunan" name="identPertanianPerkebunan" aria-label="Perkebunan" required="">
+        <option value="">Pilih jawaban</option>
+        <option value="ya">Iya</option>
+        <option value="tidak">Tidak</option>
+    </select>
+    <div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianPerkebunan">
+        <label for="jumlahUsaha_identPertanianPerkebunan">
+            Tuliskan Jumlah Usaha
             <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<select class="form-select" data-required="true" id="identPertanianPerkebunan" name="identPertanianPerkebunan" required="">
-<option value="">Pilih jawaban</option>
-<option value="ya">Iya</option>
-<option value="tidak">Tidak</option>
-</select>
-<div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianPerkebunan">
-    <label for="jumlahUsaha_identPertanianPerkebunan">
-        Tuliskan Jumlah Usaha
-        <span aria-label="Wajib diisi" class="required">*</span>
-    </label>
-    <input
-        data-required="true"
-        id="jumlahUsaha_identPertanianPerkebunan"
-        inputmode="numeric"
-        min="1"
-        name="jumlahUsaha_identPertanianPerkebunan"
-        placeholder="Jumlah usaha"
-        type="number"
-    />
+        </label>
+        <input data-required="true" id="jumlahUsaha_identPertanianPerkebunan" inputmode="numeric" min="1" name="jumlahUsaha_identPertanianPerkebunan" placeholder="Jumlah usaha" type="number" />
+    </div>
 </div>
-</div>
-<div class="question-box">
-<label for="identPertanianPeternakan"><strong>d.</strong>
-            Apakah anda selama setahun yang lalu mengelola usaha <span class="question-highlight-red">Peternakan</span> dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
+
+<div class="matrix-row">
+    <div class="matrix-topline">
+        <span class="matrix-label-main"><span aria-hidden="true" class="subquestion-number">d.</span>Peternakan</span>
+        <label class="matrix-option"><input aria-label="Peternakan - Iya" class="matrix-ui-radio" data-matrix-target="identPertanianPeternakan" type="radio" value="ya" /><span>Iya</span></label>
+        <label class="matrix-option"><input aria-label="Peternakan - Tidak" class="matrix-ui-radio" data-matrix-target="identPertanianPeternakan" type="radio" value="tidak" /><span>Tidak</span></label>
+    </div>
+    <select class="form-select matrix-source-select" data-required="true" id="identPertanianPeternakan" name="identPertanianPeternakan" aria-label="Peternakan" required="">
+        <option value="">Pilih jawaban</option>
+        <option value="ya">Iya</option>
+        <option value="tidak">Tidak</option>
+    </select>
+    <div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianPeternakan">
+        <label for="jumlahUsaha_identPertanianPeternakan">
+            Tuliskan Jumlah Usaha
             <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<select class="form-select" data-required="true" id="identPertanianPeternakan" name="identPertanianPeternakan" required="">
-<option value="">Pilih jawaban</option>
-<option value="ya">Iya</option>
-<option value="tidak">Tidak</option>
-</select>
-<div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianPeternakan">
-    <label for="jumlahUsaha_identPertanianPeternakan">
-        Tuliskan Jumlah Usaha
-        <span aria-label="Wajib diisi" class="required">*</span>
-    </label>
-    <input
-        data-required="true"
-        id="jumlahUsaha_identPertanianPeternakan"
-        inputmode="numeric"
-        min="1"
-        name="jumlahUsaha_identPertanianPeternakan"
-        placeholder="Jumlah usaha"
-        type="number"
-    />
+        </label>
+        <input data-required="true" id="jumlahUsaha_identPertanianPeternakan" inputmode="numeric" min="1" name="jumlahUsaha_identPertanianPeternakan" placeholder="Jumlah usaha" type="number" />
+    </div>
 </div>
-</div>
-<div class="question-box">
-<label for="identPertanianKehutanan"><strong>e.</strong>
-            Apakah anda selama setahun yang lalu mengelola usaha <span class="question-highlight-red">Kehutanan</span> dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
+
+<div class="matrix-row">
+    <div class="matrix-topline">
+        <span class="matrix-label-main"><span aria-hidden="true" class="subquestion-number">e.</span>Kehutanan</span>
+        <label class="matrix-option"><input aria-label="Kehutanan - Iya" class="matrix-ui-radio" data-matrix-target="identPertanianKehutanan" type="radio" value="ya" /><span>Iya</span></label>
+        <label class="matrix-option"><input aria-label="Kehutanan - Tidak" class="matrix-ui-radio" data-matrix-target="identPertanianKehutanan" type="radio" value="tidak" /><span>Tidak</span></label>
+    </div>
+    <select class="form-select matrix-source-select" data-required="true" id="identPertanianKehutanan" name="identPertanianKehutanan" aria-label="Kehutanan" required="">
+        <option value="">Pilih jawaban</option>
+        <option value="ya">Iya</option>
+        <option value="tidak">Tidak</option>
+    </select>
+    <div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianKehutanan">
+        <label for="jumlahUsaha_identPertanianKehutanan">
+            Tuliskan Jumlah Usaha
             <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<select class="form-select" data-required="true" id="identPertanianKehutanan" name="identPertanianKehutanan" required="">
-<option value="">Pilih jawaban</option>
-<option value="ya">Iya</option>
-<option value="tidak">Tidak</option>
-</select>
-<div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianKehutanan">
-    <label for="jumlahUsaha_identPertanianKehutanan">
-        Tuliskan Jumlah Usaha
-        <span aria-label="Wajib diisi" class="required">*</span>
-    </label>
-    <input
-        data-required="true"
-        id="jumlahUsaha_identPertanianKehutanan"
-        inputmode="numeric"
-        min="1"
-        name="jumlahUsaha_identPertanianKehutanan"
-        placeholder="Jumlah usaha"
-        type="number"
-    />
+        </label>
+        <input data-required="true" id="jumlahUsaha_identPertanianKehutanan" inputmode="numeric" min="1" name="jumlahUsaha_identPertanianKehutanan" placeholder="Jumlah usaha" type="number" />
+    </div>
 </div>
-</div>
-<div class="question-box">
-<label for="identPertanianPerikanan"><strong>f.</strong>
-            Apakah anda selama setahun yang lalu mengelola usaha <span class="question-highlight-red">Perikanan</span> dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
+
+<div class="matrix-row">
+    <div class="matrix-topline">
+        <span class="matrix-label-main"><span aria-hidden="true" class="subquestion-number">f.</span>Perikanan</span>
+        <label class="matrix-option"><input aria-label="Perikanan - Iya" class="matrix-ui-radio" data-matrix-target="identPertanianPerikanan" type="radio" value="ya" /><span>Iya</span></label>
+        <label class="matrix-option"><input aria-label="Perikanan - Tidak" class="matrix-ui-radio" data-matrix-target="identPertanianPerikanan" type="radio" value="tidak" /><span>Tidak</span></label>
+    </div>
+    <select class="form-select matrix-source-select" data-required="true" id="identPertanianPerikanan" name="identPertanianPerikanan" aria-label="Perikanan" required="">
+        <option value="">Pilih jawaban</option>
+        <option value="ya">Iya</option>
+        <option value="tidak">Tidak</option>
+    </select>
+    <div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianPerikanan">
+        <label for="jumlahUsaha_identPertanianPerikanan">
+            Tuliskan Jumlah Usaha
             <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<select class="form-select" data-required="true" id="identPertanianPerikanan" name="identPertanianPerikanan" required="">
-<option value="">Pilih jawaban</option>
-<option value="ya">Iya</option>
-<option value="tidak">Tidak</option>
-</select>
-<div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianPerikanan">
-    <label for="jumlahUsaha_identPertanianPerikanan">
-        Tuliskan Jumlah Usaha
-        <span aria-label="Wajib diisi" class="required">*</span>
-    </label>
-    <input
-        data-required="true"
-        id="jumlahUsaha_identPertanianPerikanan"
-        inputmode="numeric"
-        min="1"
-        name="jumlahUsaha_identPertanianPerikanan"
-        placeholder="Jumlah usaha"
-        type="number"
-    />
+        </label>
+        <input data-required="true" id="jumlahUsaha_identPertanianPerikanan" inputmode="numeric" min="1" name="jumlahUsaha_identPertanianPerikanan" placeholder="Jumlah usaha" type="number" />
+    </div>
 </div>
-</div>
-<div class="question-box">
-<label for="identPertanianJasa"><strong>g.</strong>
-            Apakah anda selama setahun yang lalu mengelola usaha <span class="question-highlight-red">Jasa Pertanian</span> dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
+
+<div class="matrix-row">
+    <div class="matrix-topline">
+        <span class="matrix-label-main"><span aria-hidden="true" class="subquestion-number">g.</span>Jasa Pertanian</span>
+        <label class="matrix-option"><input aria-label="Jasa Pertanian - Iya" class="matrix-ui-radio" data-matrix-target="identPertanianJasa" type="radio" value="ya" /><span>Iya</span></label>
+        <label class="matrix-option"><input aria-label="Jasa Pertanian - Tidak" class="matrix-ui-radio" data-matrix-target="identPertanianJasa" type="radio" value="tidak" /><span>Tidak</span></label>
+    </div>
+    <select class="form-select matrix-source-select" data-required="true" id="identPertanianJasa" name="identPertanianJasa" aria-label="Jasa Pertanian" required="">
+        <option value="">Pilih jawaban</option>
+        <option value="ya">Iya</option>
+        <option value="tidak">Tidak</option>
+    </select>
+    <div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianJasa">
+        <label for="jumlahUsaha_identPertanianJasa">
+            Tuliskan Jumlah Usaha
             <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<select class="form-select" data-required="true" id="identPertanianJasa" name="identPertanianJasa" required="">
-<option value="">Pilih jawaban</option>
-<option value="ya">Iya</option>
-<option value="tidak">Tidak</option>
-</select>
-<div class="conditional-field hidden quantity-usaha-field" id="jumlahUsahaField_identPertanianJasa">
-    <label for="jumlahUsaha_identPertanianJasa">
-        Tuliskan Jumlah Usaha
-        <span aria-label="Wajib diisi" class="required">*</span>
-    </label>
-    <input
-        data-required="true"
-        id="jumlahUsaha_identPertanianJasa"
-        inputmode="numeric"
-        min="1"
-        name="jumlahUsaha_identPertanianJasa"
-        placeholder="Jumlah usaha"
-        type="number"
-    />
+        </label>
+        <input data-required="true" id="jumlahUsaha_identPertanianJasa" inputmode="numeric" min="1" name="jumlahUsaha_identPertanianJasa" placeholder="Jumlah usaha" type="number" />
+    </div>
 </div>
 </div>
-</div></div>
+</div>
 <div class="hidden" id="usahaContent">
 <!-- ================= IDENTITAS USAHA ================= -->
 <div id="identitasUsahaList" class="identitas-usaha-list">
@@ -3029,13 +3020,15 @@
             <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input data-required="true" id="keteranganKepemilikan" name="keteranganKepemilikan" placeholder="Tuliskan status kepemilikan" required="" type="text"/>
-</div><div class="question-box conditional-field hidden" id="nilaiKontrakSewaField">
+</div>
+<div class="question-box conditional-field hidden" id="nilaiKontrakSewaField">
 <label for="nilaiKontrakSewa"><strong>b.</strong>
             Jika kontrak/sewa, nilai kontrak sebulan : Rp
             <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="general" data-max-value="1000000000000000" data-required="true" id="nilaiKontrakSewa" inputmode="numeric" min="0" name="nilaiKontrakSewa" placeholder="Rp 0" required="" type="text"/>
-</div><div class="question-box conditional-field hidden" id="perkiraanSewaBebasSendiriField">
+</div>
+<div class="question-box conditional-field hidden" id="perkiraanSewaBebasSendiriField">
 <label for="perkiraanSewaBebasSendiri"><strong>c.</strong>
             Jika milik sendiri/bebas sewa, perkiraan sewa sebulan : Rp
             <span aria-label="Wajib diisi" class="required">*</span>
@@ -3228,7 +3221,7 @@
                 Pilih tempat pembuangan akhir tinja
             </option>
 <option value="74">Tangki septik</option>
-<option value="75">IPAL</option>
+<option value="75">Instalasi Pengolahan Air Limbah (IPAL)</option>
 <option value="76">
                 Kolam/sawah/sungai/danau/laut
             </option>
@@ -3314,7 +3307,7 @@
             ID Pelanggan PLN
             <span aria-label="Wajib diisi" class="required">*</span>
 </label>
-<input data-required="true" id="idPelangganPLN" name="idPelangganPLN" placeholder="Masukkan ID Pelanggan PLN" required="" type="text"/>
+<input data-required="true" id="idPelangganPLN" name="idPelangganPLN" placeholder="Masukkan ID Pelanggan PLN" required="" type="text" maxlength="12"/>
 <div class="field-hint">
     Untuk pertanyaan poin ini jika tidak tahu, silakan tanyakan kepada pemilik kos
 </div>
@@ -3324,7 +3317,7 @@
             No. Meteran Listrik
             <span aria-label="Wajib diisi" class="required">*</span>
 </label>
-<input data-required="true" id="nomorMeteran" name="nomorMeteran" placeholder="Masukkan nomor meteran" required="" type="text"/>
+<input data-required="true" id="nomorMeteran" name="nomorMeteran" placeholder="Masukkan nomor meteran" required="" type="text" maxlength="12"/>
 <div class="field-hint">
     Untuk pertanyaan poin ini jika tidak tahu, silakan tanyakan kepada pemilik kos
 </div>
@@ -3468,7 +3461,7 @@
                 <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input data-required="true" id="emas" min="0" name="emas" required="" type="number"/>
-<div class="field-hint">Satuan: unit</div>
+<div class="field-hint">Satuan: gram</div>
 </div>
 <!-- KOMPUTER -->
 <div class="question-box">
@@ -3528,6 +3521,7 @@
                 <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input data-required="true" id="jumlahTanah" min="0" name="jumlahTanah" required="" type="number"/>
+<div class="field-hint">Satuan: unit</div>
 </div>
 <!-- NILAI TANAH -->
 <div class="question-box conditional-field hidden" id="nilaiTanahField">
@@ -3536,6 +3530,7 @@
                 <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="general" data-max-value="1000000000000000" data-required="true" id="nilaiTanah" inputmode="numeric" min="0" name="nilaiTanah" placeholder="Rp 0" required="" type="text"/>
+<div class="field-hint">Satuan: unit</div>
 </div>
 <!-- JUMLAH BANGUNAN -->
 <div class="question-box">
@@ -3624,7 +3619,7 @@
                 Data Berhasil Dicatat
             </h2>
 <p>
-                Selamat kamu sudah berhasil mengisi sensus untuk mahasiswa Universitas Sriwijaya yang berdomisili di Indralaya
+                Selamat kamu sudah berhasil mengisi kuesioner Pojok Sensus. Terima kasih atas partisipasinya🤗🙏
             </p>
 <div class="confirmation-detail" id="confirmDetail"></div>
 <button class="btn btn-primary" id="resetBtn" type="button">
