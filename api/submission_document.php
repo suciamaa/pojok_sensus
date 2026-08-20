@@ -89,7 +89,8 @@ try {
     .success { text-align: center; margin: 20px 0 30px; }
     .success-mark { width: 48px; height: 48px; line-height: 48px; border-radius: 50%; margin: 0 auto 12px; background: #16a34a; color: #fff; font-size: 25px; font-weight: 700; }
     .success h2 { margin: 0 0 6px; font-size: 22px; }
-    .success p { margin: 0; color: #555; }
+    .success p { margin: 0 auto; max-width: 680px; color: #555; line-height: 1.65; }
+    .success p strong { color: #c2410c; }
     .section-title { margin: 28px 0 12px; font-size: 15px; font-weight: 700; padding-bottom: 7px; border-bottom: 1px solid #ddd; }
     table { width: 100%; border-collapse: collapse; }
     td { padding: 9px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
@@ -141,7 +142,7 @@ try {
     <section class="success">
         <div class="success-mark">✓</div>
         <h2>Data Berhasil Dicatat</h2>
-        <p>Selamat kamu sudah berhasil mengisi kuesioner Pojok Sensus. Terima kasih atas partisipasinya🤗🙏</p>
+        <p>Terima kasih, <strong><?= $value($data['nama']) ?></strong>, sudah bersedia disensus pada Sensus Ekonomi 2026. Data yang diberikan sangat berarti untuk pembangunan ekonomi Indonesia.</p>
     </section>
 
     <div class="section-title">Data Registrasi Awal</div>
@@ -180,7 +181,7 @@ try {
         <span>*Syarat dan Ketentuan berlaku</span>
     </div>
 
-    <div class="footer">Dokumen ini merupakan bukti bahwa Pengisian Pojok Sensus kamu telah berhasil dikirimkan.</div>
+    <div class="footer">Dokumen ini merupakan bukti bahwa kamu telah berhasil menyelesaikan pertanyaan Sensus Ekonomi 2026</div>
 </main>
 </body>
 </html>

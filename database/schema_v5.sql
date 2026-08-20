@@ -13,10 +13,12 @@ CREATE TABLE IF NOT EXISTS respondent_profiles (
     program_studi VARCHAR(150) NOT NULL,
     tempat_tinggal VARCHAR(100) NOT NULL,
     nama_tempat VARCHAR(150) NULL,
+    provinsi VARCHAR(120) NULL DEFAULT 'Sumatera Selatan',
     alamat VARCHAR(255) NULL,
     rt VARCHAR(10) NULL,
     rw VARCHAR(10) NULL,
     desa VARCHAR(120) NULL,
+    sls VARCHAR(255) NULL,
     kecamatan VARCHAR(120) NULL,
     kabupaten VARCHAR(120) NULL DEFAULT 'Ogan Ilir',
     kode_pos VARCHAR(10) NULL,
@@ -53,8 +55,8 @@ CREATE TABLE IF NOT EXISTS questionnaire_responses (
 CREATE OR REPLACE VIEW v_data_sensus_lengkap AS
 SELECT
     r.id AS respondent_id, r.id_key, r.respondent_uuid, r.nim, r.nama, r.hp, r.angkatan,
-    r.fakultas, r.program_studi, r.tempat_tinggal, r.nama_tempat, r.alamat, r.rt, r.rw,
-    r.desa, r.kecamatan, r.kabupaten, r.kode_pos, r.latitude, r.longitude, r.full_address,
+    r.fakultas, r.program_studi, r.tempat_tinggal, r.nama_tempat, r.provinsi, r.alamat, r.rt, r.rw,
+    r.desa, r.sls, r.kecamatan, r.kabupaten, r.kode_pos, r.latitude, r.longitude, r.full_address,
     r.status AS respondent_status, r.created_at AS respondent_created_at, r.updated_at AS respondent_updated_at,
     q.id AS questionnaire_id, q.answers_json AS questionnaire_answers, q.foto_depan_path,
     q.foto_ruang_tamu_path, q.status AS questionnaire_status, q.submitted_at AS questionnaire_submitted_at

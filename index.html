@@ -57,7 +57,8 @@
             Pengisian Kuesioner Sensus Ekonomi 2026
         </p>
 <p class="welcome-location">
-            Mahasiswa Universitas Sriwijaya yang berdomisili di Indralaya
+            Mahasiswa Universitas Sriwijaya yang berdomisili di <br>
+            Indralaya, Indralaya Selatan, dan Indralaya Utara
         </p>
 </div>
 <!-- KOLOM KANAN: GAMBAR -->
@@ -70,7 +71,7 @@
 <span class="welcome-info-label">KRITERIA KUESIONER</span>
 <h3>Sebelum Memulai Pastikan Anda Memenuhi Kriteria Pendataan</h3>
 <p>
-                        Kuesioner ini ditujukan bagi Mahasiswa Universitas Sriwijaya yang berdomisili di Indralaya, Indralaya Utara dan Indralaya Selatan dan saat ini tinggal 
+                        Kuesioner ini ditujukan bagi Mahasiswa Universitas Sriwijaya yang berdomisili di Indralaya, Indralaya Utara dan Indralaya Selatan dan saat ini tinggal
                         secara mandiri, tidak bersama orang tua atau wali
                     </p>
 </div>
@@ -467,71 +468,74 @@
                         </p>
 <div class="address-grid">
 <div class="field full-width">
-<label for="fNamaTempat">Nama Tempat / Nama Kos <span class="required">*</span></label>
+<label for="fNamaTempat">Nama Tempat/Nama Kos <span class="required">*</span></label>
 <input id="fNamaTempat" maxlength="100" placeholder="Contoh: Kos Bayak Jorey" type="text"/>
 <div class="error-message" id="errNamaTempat">Masukkan nama tempat tinggal.</div>
 </div>
-<div class="field full-width address-autocomplete-wrap">
-<label for="fAlamat">Alamat / Nama Jalan <span class="required">*</span></label>
-<input autocomplete="off" id="fAlamat" maxlength="180" placeholder="Contoh: Jl. Palembang - Indralaya No. 25" type="text"/>
-<div class="error-message" id="errAlamat">Masukkan alamat atau nama jalan.</div>
+<div class="field">
+<label for="fProvinsi">Provinsi <span class="required">*</span></label>
+<input id="fProvinsi" maxlength="100" readonly type="text" value="Sumatera Selatan"/>
 </div>
 <div class="field">
-<label for="fRt">RT</label>
-<input id="fRt" inputmode="numeric" maxlength="5" placeholder="Contoh: 03" type="text"/>
-<div class="error-message" id="errRt">Isi RT dengan angka.</div>
+<label for="fKabupaten">Kabupaten <span class="required">*</span></label>
+<input id="fKabupaten" maxlength="100" readonly type="text" value="Ogan Ilir"/>
 </div>
-<div class="field">
-<label for="fRw">RW</label>
-<input id="fRw" inputmode="numeric" maxlength="5" placeholder="Contoh: 02" type="text"/>
-<div class="error-message" id="errRw">Isi RW dengan angka.</div>
-</div>
-<!-- Kecamatan -->
-<div class="field">
-<label for="fKecamatan">
-Kecamatan
-<span class="required">*</span>
-</label>
+<div class="address-field-row address-kecamatan-row full-width" id="kecamatanAddressRow">
+<div class="field address-kecamatan-field">
+<label for="fKecamatan">Kecamatan <span class="required">*</span></label>
 <select id="fKecamatan">
 <option value="">Pilih Kecamatan</option>
-<option value="indralaya">060. Indralaya</option>
-<option value="indralaya utara">061. Indralaya Utara</option>
-<option value="indralaya selatan">062. Indralaya Selatan</option>
+<option value="Indralaya">Indralaya</option>
+<option value="Indralaya Selatan">Indralaya Selatan</option>
+<option value="Indralaya Utara">Indralaya Utara</option>
+<option value="Lainnya">Lainnya</option>
 </select>
 <div class="error-message" id="errKecamatan">Pilih kecamatan terlebih dahulu.</div>
 </div>
+<div class="field conditional-field hidden" id="kecamatanLainnyaField">
+<label for="kecamatanLainnya">Tuliskan Kecamatan Lainnya <span class="required">*</span></label>
+<input type="text" id="kecamatanLainnya" name="kecamatanLainnya" placeholder="Tuliskan nama kecamatan" data-required="true"/>
+<div class="error-message" id="errKecamatanLainnya">Tuliskan kecamatan.</div>
+</div>
+</div>
 
-<!-- Desa/Kelurahan -->
-<div class="field">
-<label for="fDesa">
-Desa/Kelurahan
-<span class="required">*</span>
-</label>
+<div class="address-dependent-grid full-width" id="desaSlsAddressGrid">
+<div class="field" id="desaDropdownField">
+<label for="fDesa">Desa/Kelurahan <span class="required">*</span></label>
 <select id="fDesa" disabled>
 <option value="">Pilih kecamatan terlebih dahulu</option>
 </select>
 <div class="field-hint">Pilih kecamatan terlebih dahulu.</div>
 <div class="error-message" id="errDesa">Pilih desa/kelurahan terlebih dahulu.</div>
 </div>
-
-<!-- Desa/Kelurahan Lainnya -->
-<div class="question-box conditional-field hidden full-width" id="desaLainnyaField">
-<label for="desaLainnya">
-Tuliskan desa/kelurahan lainnya
-<span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<input type="text" id="desaLainnya" name="desaLainnya" placeholder="Tuliskan nama desa/kelurahan" data-required="true">
+<div class="field conditional-field hidden" id="desaLainnyaField">
+<label for="desaLainnya">Tuliskan Desa/Kelurahan Lainnya <span class="required">*</span></label>
+<input type="text" id="desaLainnya" name="desaLainnya" placeholder="Tuliskan nama desa/kelurahan" data-required="true"/>
+<div class="error-message" id="errDesaLainnya">Tuliskan desa/kelurahan.</div>
 </div>
-<div class="field">
-<label for="fKabupaten">Kabupaten</label>
-<input id="fKabupaten" maxlength="100" readonly="" type="text" value="Ogan Ilir"/>
+<div class="field" id="slsDropdownField">
+<label for="fSls">Nama SLS (RT/RW/Lingkungan/Dusun)</label>
+<select id="fSls" disabled>
+<option value="">Pilih desa terlebih dahulu</option>
+</select>
+<div class="field-hint">SLS mengikuti Desa/Kelurahan yang dipilih.</div>
+<div class="error-message" id="errSls">Pilih Nama SLS.</div>
 </div>
-<div class="field">
-<label for="fKodePos">Kode Pos</label>
-<input id="fKodePos" inputmode="numeric" maxlength="5" placeholder="Contoh: 30862" type="text"/>
-<div class="error-message" id="errKodePos">Isi kode pos 5 digit.</div>
+<div class="field conditional-field hidden" id="slsLainnyaField">
+<label for="slsLainnya">Tuliskan Nama SLS Lainnya <span class="required">*</span></label>
+<input type="text" id="slsLainnya" name="slsLainnya" placeholder="Tuliskan Nama SLS"/>
 </div>
 </div>
+<div class="field full-width address-autocomplete-wrap">
+<label for="fAlamat">Alamat/Jalan/Gang/Nomor Rumah <span class="required">*</span></label>
+<input autocomplete="off" id="fAlamat" maxlength="180" placeholder="Contoh: Jl. Palembang - Indralaya No. 25" type="text"/>
+<div class="error-message" id="errAlamat">Masukkan alamat atau nama jalan.</div>
+</div>
+<!-- Hidden legacy fields kept for backend compatibility. -->
+<input id="fRt" type="hidden"/>
+<input id="fRw" type="hidden"/>
+<input id="fKodePos" type="hidden"/>
+</div></div>
 <div class="error-message" id="errAddressSearch"></div>
 </div>
 </div>
@@ -548,6 +552,9 @@ Tuliskan desa/kelurahan lainnya
 <div class="detail-item">
 <span>Desa / Kelurahan</span>
 <strong id="coordDesa">—</strong>
+</div><div class="detail-item">
+<span>Nama SLS</span>
+<strong id="coordSls">—</strong>
 </div>
 <div class="detail-item">
 <span>Kecamatan</span>
@@ -738,71 +745,6 @@ Tuliskan desa/kelurahan lainnya
 </label>
 <input data-required="true" id="jumlahAnggotaPendataan" min="1" placeholder="1 (tinggal sendirian)/jumlah saudara yang tinggal bersama dalam 1 kamar/kos/kontrakan dalam satu KK " required="required" type="number"/>
 </div>
-<!-- PROVINSI -->
-<div class="field">
-<label for="provinsi"><strong>6.</strong>
-                            Provinsi
-
-                            <span aria-label="Wajib diisi" class="required">
-                                *
-                            </span>
-</label>
-<input data-required="true" id="provinsi" placeholder="Masukkan provinsi sesuai KK" readonly="" required="required" type="text"/>
-</div>
-<!-- KABUPATEN / KOTA -->
-<div class="field">
-<label for="kabupaten"><strong>7.</strong>
-                            Kabupaten/Kota
-
-                            <span aria-label="Wajib diisi" class="required">
-                                *
-                            </span>
-</label>
-<input data-required="true" id="kabupaten" placeholder="Masukkan kabupaten/kota sesuai KK" readonly="" required="required" type="text"/>
-</div>
-<!-- KECAMATAN -->
-<div class="field">
-<label for="kecamatan"><strong>8.</strong>
-                            Kecamatan
-
-                            <span aria-label="Wajib diisi" class="required">
-                                *
-                            </span>
-</label>
-<input data-required="true" id="kecamatan" placeholder="Masukkan kecamatan sesuai KK" readonly="" required="required" type="text"/>
-</div>
-<!-- DESA / KELURAHAN -->
-<div class="field">
-<label for="desa"><strong>9.</strong>
-                            Desa/Kelurahan
-
-                            <span aria-label="Wajib diisi" class="required">
-                                *
-                            </span>
-</label>
-<input data-required="true" id="desa" placeholder="Masukkan desa/kelurahan sesuai KK" readonly="" required="required" type="text"/>
-</div>
-<!-- SLS / RT -->
-<div class="field">
-<label for="sls"><strong>10.</strong>
-                            Nama SLS/RT
-</label>
-<input id="sls" placeholder="Masukkan nama SLS/RT sesuai KK" readonly="" type="text"/>
-</div>
-<!-- ALAMAT -->
-<div class="field full-width">
-<label for="alamat"><strong>11.</strong>
-                            Alamat
-
-                            <small>
-                                Jalan/Gang/Nomor Rumah/RT/RW
-                            </small>
-<span aria-label="Wajib diisi" class="required">
-                                *
-                            </span>
-</label>
-<textarea data-required="true" id="alamat" placeholder="Masukkan alamat lengkap sesuai KK" readonly="" required="required" rows="3"></textarea>
-</div>
 </div>
 <!-- =================================================
                      FORM FOOTER
@@ -911,7 +853,7 @@ Tuliskan desa/kelurahan lainnya
 ========================================================= -->
 <div class="question-box matrix-question">
 <label><strong>6.</strong>
-    Apakah memiliki keterbatasan dalam jangka waktu lama sehingga mengalami 
+    Apakah memiliki keterbatasan dalam jangka waktu lama sehingga mengalami
     kesulitan dalam menjalankan aktivitas sehari-hari?
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
@@ -1085,7 +1027,7 @@ Tuliskan desa/kelurahan lainnya
 <option value="tidak">Tidak (Hanya Mahasiswa)</option>
 </select>
 <div class="field-hint">
-            Contoh Pekerjaan: Part time, freelance yang memiliki gaji mingguan atau bulanan.
+            Contoh Pekerjaan: Part time, freelance, atau pekerjaan lain yang mendapatkan upah/gaji harian, mingguan, atau bulanan
         </div>
 </div>
 <!--PROFESI & STATUS KEDUDUKAN DALAM PEKERJAAN -->
@@ -1209,7 +1151,7 @@ Tuliskan desa/kelurahan lainnya
 <div class="section-icon orange">D</div>
 <div>
 <h3>Usaha &amp; Identifikasi Usaha</h3>
-<p>Identifikasi usaha non pertanian, pertanian, dan identitas usaha/perusahaan.</p>
+<p>Identifikasi usaha <span class="question-highlight-red">non pertanian</span>, pertanian, dan identitas usaha/perusahaan.</p>
 </div>
 </div>
 <!-- =================================================
@@ -1273,7 +1215,7 @@ Tuliskan desa/kelurahan lainnya
 </div>
 <div class="question-box">
 <label for="identUsahaLuarTempatTinggal"><strong>c.</strong>
-            Apakah memiliki <span class="question-highlight-red">usaha di luar tempat tinggal</span>, yang lokasi usahanya tetap tetapi peralatan/perlengkapan usahanya dipindah/dibawa pulang/dibongkar pasang? 
+            Apakah memiliki <span class="question-highlight-red">usaha di luar tempat tinggal</span>, yang lokasi usahanya tetap tetapi peralatan/perlengkapan usahanya dipindah/dibawa pulang/dibongkar pasang?
             <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <div class="field-hint">Contoh: usaha kaki lima/tenda seafood yang jika sudah tutup semua peralatan akan dibawa pulang, usaha dagang martabak gerobakan yang mangkal di pinggir jalan namun jika sudah selesai gerobak akan dibawa pulang, dan usaha lain yang sejenis.</div>
@@ -1327,7 +1269,7 @@ Tuliskan desa/kelurahan lainnya
 </div>
 </div></div>
 <div class="question-box matrix-question usaha-pertanian-matrix" id="identifikasiUsahaPertanianMatrix">
-<h4 class="subheading"><strong>2.</strong>Identifikasi Usaha Pertanian yang Dilakukan Keluarga (Iya, Tidak)</h4>
+<h3 class="subheading"><strong>2.</strong>Identifikasi Usaha <span class="question-highlight-red">Pertanian</span> yang Dilakukan Keluarga (Iya, Tidak)</h3>
 <p class="matrix-intro">
     Apakah anda selama setahun yang lalu mengelola usaha di bawah ini dengan tujuan sebagian atau seluruh hasilnya untuk dijual/ditukar?
 </p>
@@ -1504,48 +1446,71 @@ Tuliskan desa/kelurahan lainnya
 </div>
 <!-- ALAMAT USAHA -->
 <div class="question-box full-width">
-<label for="alamatUsaha"><strong>c.</strong>
-                    Alamat usaha/perusahaan
-                    <span aria-label="Wajib diisi" class="required">*</span>
+<label><strong>c.</strong>
+    Apakah alamat usaha anda sama dengan alamat tempat tinggal anda?
+    <span aria-label="Wajib diisi" class="required">*</span>
 </label>
-<textarea data-required="true" id="alamatUsaha" name="alamatUsaha" required="" rows="3"></textarea>
-<div class="field-hint">
-                    Tuliskan alamat lengkap lokasi usaha/perusahaan. Khusus usaha: 1) di dalam bangunan tempat tinggal (contoh: usaha online, catering, les privat, dan sejenisnya); 2) keliling; atau 3) usaha di luar bangunan tempat tinggal dengan lokasi tetap dan perlengkapan usaha dipindah/dibongkar pasang.
-                </div>
+<div class="option-group">
+<label class="option">
+<input data-required="true" name="alamatUsahaSama" type="radio" value="iya" required/>
+<span>Iya</span>
+</label>
+<label class="option">
+<input data-required="true" name="alamatUsahaSama" type="radio" value="tidak"/>
+<span>Tidak</span>
+</label>
+</div>
+</div>
+<div class="question-box full-width conditional-field hidden usaha-address-field" id="alamatUsahaFields">
+<div class="form-grid">
+<div class="field">
+<label for="usahaProvinsi">Provinsi <span class="required">*</span></label>
+<input data-required="true" id="usahaProvinsi" name="usahaProvinsi" type="text" placeholder="Provinsi"/>
+</div>
+<div class="field">
+<label for="usahaKabupaten">Kabupaten <span class="required">*</span></label>
+<input data-required="true" id="usahaKabupaten" name="usahaKabupaten" type="text" placeholder="Kabupaten"/>
+</div>
+<div class="field">
+<label for="usahaKecamatan">Kecamatan <span class="required">*</span></label>
+<input data-required="true" id="usahaKecamatan" name="usahaKecamatan" type="text" placeholder="Kecamatan"/>
+</div>
+<div class="field">
+<label for="usahaDesa">Desa/Kelurahan <span class="required">*</span></label>
+<input data-required="true" id="usahaDesa" name="usahaDesa" type="text" placeholder="Desa/Kelurahan"/>
+</div>
+<div class="field">
+<label for="usahaSls">Nama SLS(RT/RW/Lingkungan/Dusun) <span class="required">*</span></label>
+<input data-required="true" id="usahaSls" name="usahaSls" type="text" placeholder="Nama SLS"/>
+</div>
+<div class="field full-width">
+<label for="usahaAlamat">Alamat/Jalan/Gang/Nomor Rumah <span class="required">*</span></label>
+<textarea data-required="true" id="usahaAlamat" name="usahaAlamat" rows="3" placeholder="Alamat lengkap lokasi usaha"></textarea>
+</div>
+</div>
 </div>
 <div class="question-box">
-<label for="rtUsaha"><strong>d.</strong>
-                    RT
-                    </label>
-<input id="rtUsaha" inputmode="numeric" maxlength="3" name="rtUsaha" placeholder="Nomor RT" type="text"/>
-</div>
-<div class="question-box">
-<label for="rwUsaha"><strong>e.</strong>
-                    RW
-                    </label>
-<input id="rwUsaha" inputmode="numeric" maxlength="3" name="rwUsaha" placeholder="Nomor RW" type="text"/>
-</div>
-<div class="question-box">
-<label for="teleponUsaha"><strong>f.</strong>
+<label for="teleponUsaha"><strong>d.</strong>
                     Nomor Telepon/Whatsapp
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input data-required="true" id="teleponUsaha" inputmode="tel" name="teleponUsaha" placeholder="Nomor Telepon/Whatsapp" required="" type="text"/>
 </div>
 <div class="question-box">
-<label for="kodePosUsaha"><strong>g.</strong>
+<label for="kodePosUsaha"><strong>e.</strong>
                     Kode Pos
 </label>
 <input id="kodePosUsaha" inputmode="numeric" maxlength="5" name="kodePosUsaha" placeholder="Kode Pos" type="text"/>
 </div>
 <div class="question-box">
-<label for="websiteUsaha"><strong>h.</strong>
+<label for="websiteUsaha"><strong>f.</strong>
                     Homepage/Website
 </label>
 <input id="websiteUsaha" name="websiteUsaha" placeholder="Homepage/Website (jika ada)" type="url"/>
 </div>
 </div>
 </div>
+
 <!-- ================= NIB ================= -->
 </div><div class="question-group numbered-question-group usaha-section-group"><h4 class="subheading"><strong>4.</strong>
             Nomor Induk Berusaha (NIB)
@@ -1848,114 +1813,48 @@ Tuliskan desa/kelurahan lainnya
 <!-- 16b. TUJUAN PENGGUNAAN INTERNET -->
 <div class="conditional-field hidden" id="tujuanPenggunaanInternet">
 <div class="section-divider"></div>
-<div class="question-box">
+<div class="question-box matrix-question">
 <label>
-            Tujuan penggunaan internet:
-            <span aria-label="Wajib diisi" class="required">*</span>
+    Tujuan penggunaan internet:
+    <span aria-label="Wajib diisi" class="required">*</span>
 </label>
-<!-- b1 -->
-<div class="question-box">
-<label>
-                Menerima pesanan barang/jasa
-                <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<div class="option-group">
-<label class="option">
-<input data-required="true" name="internetMenerimaPesanan" type="radio" value="1"/>
-<span>Ya</span>
-</label>
-<label class="option">
-<input data-required="true" name="internetMenerimaPesanan" type="radio" value="2"/>
+<div class="matrix-table">
+<div class="matrix-header">
+<span>Tujuan penggunaan internet</span>
+<span>Iya</span>
 <span>Tidak</span>
-</label>
+</div>
+<div class="matrix-row">
+<span class="matrix-label">Menerima pesanan barang/jasa</span>
+<label class="matrix-option"><input data-required="true" name="internetMenerimaPesanan" type="radio" value="1" aria-label="Menerima pesanan barang/jasa - Iya"/><span>Iya</span></label>
+<label class="matrix-option"><input data-required="true" name="internetMenerimaPesanan" type="radio" value="2" aria-label="Menerima pesanan barang/jasa - Tidak"/><span>Tidak</span></label>
+</div>
+<div class="matrix-row">
+<span class="matrix-label">Produksi barang/jasa</span>
+<label class="matrix-option"><input data-required="true" name="internetProduksi" type="radio" value="1" aria-label="Produksi barang/jasa - Iya"/><span>Iya</span></label>
+<label class="matrix-option"><input data-required="true" name="internetProduksi" type="radio" value="2" aria-label="Produksi barang/jasa - Tidak"/><span>Tidak</span></label>
+</div>
+<div class="matrix-row">
+<span class="matrix-label">Distribusi barang/jasa</span>
+<label class="matrix-option"><input data-required="true" name="internetDistribusi" type="radio" value="1" aria-label="Distribusi barang/jasa - Iya"/><span>Iya</span></label>
+<label class="matrix-option"><input data-required="true" name="internetDistribusi" type="radio" value="2" aria-label="Distribusi barang/jasa - Tidak"/><span>Tidak</span></label>
+</div>
+<div class="matrix-row">
+<span class="matrix-label">Membeli bahan baku online</span>
+<label class="matrix-option"><input data-required="true" name="internetMembeliBahanBaku" type="radio" value="1" aria-label="Membeli bahan baku online - Iya"/><span>Iya</span></label>
+<label class="matrix-option"><input data-required="true" name="internetMembeliBahanBaku" type="radio" value="2" aria-label="Membeli bahan baku online - Tidak"/><span>Tidak</span></label>
+</div>
+<div class="matrix-row">
+<span class="matrix-label">Promosi</span>
+<label class="matrix-option"><input data-required="true" name="internetPromosi" type="radio" value="1" aria-label="Promosi - Iya"/><span>Iya</span></label>
+<label class="matrix-option"><input data-required="true" name="internetPromosi" type="radio" value="2" aria-label="Promosi - Tidak"/><span>Tidak</span></label>
+</div>
+<div class="matrix-row">
+<span class="matrix-label">Lainnya</span>
+<label class="matrix-option"><input data-required="true" name="internetLainnya" type="radio" value="1" aria-label="Lainnya - Iya"/><span>Iya</span></label>
+<label class="matrix-option"><input data-required="true" name="internetLainnya" type="radio" value="2" aria-label="Lainnya - Tidak"/><span>Tidak</span></label>
 </div>
 </div>
-<!-- b2 -->
-<div class="question-box">
-<label>
-                Produksi barang/jasa
-                <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<div class="option-group">
-<label class="option">
-<input data-required="true" name="internetProduksi" type="radio" value="1"/>
-<span>Ya</span>
-</label>
-<label class="option">
-<input data-required="true" name="internetProduksi" type="radio" value="2"/>
-<span>Tidak</span>
-</label>
-</div>
-</div>
-<!-- b3 -->
-<div class="question-box">
-<label>
-                Distribusi barang/jasa
-                <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<div class="option-group">
-<label class="option">
-<input data-required="true" name="internetDistribusi" type="radio" value="1"/>
-<span>Ya</span>
-</label>
-<label class="option">
-<input data-required="true" name="internetDistribusi" type="radio" value="2"/>
-<span>Tidak</span>
-</label>
-</div>
-</div>
-<!-- b4 -->
-<div class="question-box">
-<label>
-                Membeli bahan baku online
-                <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<div class="option-group">
-<label class="option">
-<input data-required="true" name="internetMembeliBahanBaku" type="radio" value="1"/>
-<span>Ya</span>
-</label>
-<label class="option">
-<input data-required="true" name="internetMembeliBahanBaku" type="radio" value="2"/>
-<span>Tidak</span>
-</label>
-</div>
-</div>
-<!-- b5 -->
-<div class="question-box">
-<label>
-                Promosi
-                <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<div class="option-group">
-<label class="option">
-<input data-required="true" name="internetPromosi" type="radio" value="1"/>
-<span>Ya</span>
-</label>
-<label class="option">
-<input data-required="true" name="internetPromosi" type="radio" value="2"/>
-<span>Tidak</span>
-</label>
-</div>
-</div>
-<!-- b6 -->
-<div class="question-box">
-<label>
-                Lainnya
-                <span aria-label="Wajib diisi" class="required">*</span>
-</label>
-<div class="option-group">
-<label class="option">
-<input data-required="true" name="internetLainnya" type="radio" value="1"/>
-<span>Ya</span>
-</label>
-<label class="option">
-<input data-required="true" name="internetLainnya" type="radio" value="2"/>
-<span>Tidak</span>
-</label>
-</div>
-</div>
-<!-- c.11.6 Lainnya: isian manual hanya jika dipilih Ya -->
 <div class="question-box conditional-field hidden" id="internetLainnyaField">
 <label for="internetLainnyaText">Tuliskan tujuan penggunaan internet lainnya:</label>
 <input data-required="true" id="internetLainnyaText" name="internetLainnyaText" maxlength="255" type="text" placeholder="Tuliskan tujuan lainnya"/>
@@ -1981,20 +1880,11 @@ Tuliskan desa/kelurahan lainnya
 </div>
 <!-- 18. PRODUK KARYA SENI, SASTRA, DESAIN, TEKNOLOGI, WARISAN BUDAYA -->
 <div class="question-box">
-<label><strong>l.</strong>
+<label>
+    <strong>l.</strong>
         Apakah usaha/perusahaan ini menggunakan produk karya seni, sastra, desain, teknologi atau warisan budaya, baik diproduksi sendiri maupun oleh pihak lain?
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
-<div class="option-group">
-<label class="option">
-<input data-required="true" name="menggunakanProdukKarya" required="" type="radio" value="1"/>
-<span>Ya</span>
-</label>
-<label class="option">
-<input data-required="true" name="menggunakanProdukKarya" type="radio" value="2"/>
-<span>Tidak</span>
-</label>
-</div>
 <div class="field-hint">
 <strong>Contoh:</strong>
 <br/>
@@ -2010,6 +1900,31 @@ Tuliskan desa/kelurahan lainnya
         <br/>
         • Produk warisan budaya: makanan tradisional, peralatan tradisional, obat tradisional, dll.
     </div>
+<div class="option-group">
+<label class="option">
+<input data-required="true" name="menggunakanProdukKarya" required="" type="radio" value="1"/>
+<span>Ya</span>
+</label>
+<label class="option">
+<input data-required="true" name="menggunakanProdukKarya" type="radio" value="2"/>
+<span>Tidak</span>
+</label>
+</div>
+<!-- <div class="field-hint">
+<strong>Contoh:</strong>
+<br/>
+        • Produk karya seni: lukisan, patung, kerajinan, musik, tari, foto, film, ilustrasi, animasi, board game, dll.
+        <br/>
+        • Produk sastra: puisi, cerpen, novel, naskah drama, dll.
+        <br/>
+        • Produk desain: arsitektur, desain produk, desain interior, desain komunikasi visual, desain fesyen, dll.
+        <br/>
+        <span class="question-highlight-red">
+        • Produk teknologi: perangkat lunak (software), aplikasi digital, aplikasi gim, perangkat elektronik, dll.
+        </span>
+        <br/>
+        • Produk warisan budaya: makanan tradisional, peralatan tradisional, obat tradisional, dll.
+    </div> -->
 </div>
 <!-- TRANSAKSI DENGAN BUKAN PENDUDUK INDONESIA -->
 <div class="question-box">
@@ -2017,6 +1932,48 @@ Tuliskan desa/kelurahan lainnya
         Apakah usaha/perusahaan melakukan penjualan/pembelian kepada <span class="question-highlight-red">bukan penduduk Indonesia (Warga Negara Asing)</span> selama periode 1 Mei 2024 s.d. 31 Agustus 2026?
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
+<div class="field-hint">
+<strong>Bukan penduduk</strong> adalah orang atau badan yang pusat kegiatan
+        ekonominya berada di luar Indonesia.
+
+        <br/><br/>
+
+        Contoh orang yaitu turis wisatawan mancanegara yang berwisata kurang dari 1 tahun.
+
+        <br/><br/>
+
+        Contoh badan yaitu usaha/perusahaan yang tidak terdaftar badan usahanya di Indonesia.
+
+        <br/><br/>
+<strong>Contoh kegiatan:</strong>
+<br/><br/>
+
+        • <strong>Ekspor barang:</strong>
+        Pengrajin perak di Bali mengirimkan aksesori dan perhiasan
+        ke pembeli di luar negeri.
+
+        <br/><br/>
+
+        • <strong>Impor barang:</strong>
+        Toko elektronik Indonesia mengimpor smartphone dari Tiongkok
+        untuk dijual kembali.
+
+        <br/><br/>
+
+        • <strong>Ekspor jasa:</strong>
+        Konsultan Indonesia memberikan jasa pelatihan secara online
+        ke perusahaan luar negeri; Hotel di Indonesia melayani tamu
+        wisatawan mancanegara.
+
+        <br/><br/>
+        <span class="question-highlight-red">
+        • <strong>Impor jasa:</strong>
+        Usaha/perusahaan Indonesia berlangganan layanan digital berbayar
+        dari perusahaan luar negeri (Canva, Microsoft 365, Google Cloud,
+        Adobe, ChatGPT, dll); Perusahaan Indonesia menggunakan jasa
+        konsultan asing.
+        </span>
+    </div>
 <!-- PENJUALAN/PEMBELIAN BARANG -->
 <div class="question-box">
 <label>
@@ -2069,7 +2026,7 @@ Tuliskan desa/kelurahan lainnya
 </div>
 </div>
 <!-- KETERANGAN -->
-<div class="field-hint">
+<!-- <div class="field-hint">
 <strong>Bukan penduduk</strong> adalah orang atau badan yang pusat kegiatan
         ekonominya berada di luar Indonesia.
 
@@ -2110,7 +2067,7 @@ Tuliskan desa/kelurahan lainnya
         Adobe, ChatGPT, dll); Perusahaan Indonesia menggunakan jasa
         konsultan asing.
         </span>
-    </div>
+    </div> -->
 </div>
 <!-- ================= PEKERJA ================= -->
 </div><div class="question-group numbered-question-group usaha-section-group"><h4 class="subheading"><strong>6.</strong>
@@ -2145,24 +2102,32 @@ Tuliskan desa/kelurahan lainnya
                     Pekerja dibayar
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
-<input data-required="true" id="pekerjaDibayar" min="0" name="pekerjaDibayar" placeholder="Jumlah pekerja dibayar" required="" type="number"/>
-</div>
 <div class="field-hint">
             <strong>Pekerja dibayar</strong> adalah pekerja yang menerima upah/gaji
             dan/atau menerima tunjangan sosial dari usaha/perusahaan.
         </div>
+<input data-required="true" id="pekerjaDibayar" min="0" name="pekerjaDibayar" placeholder="Jumlah pekerja dibayar" required="" type="number"/>
+</div>
+<!-- <div class="field-hint">
+            <strong>Pekerja dibayar</strong> adalah pekerja yang menerima upah/gaji
+            dan/atau menerima tunjangan sosial dari usaha/perusahaan.
+        </div> -->
 <!-- PEKERJA TIDAK DIBAYAR -->
 <div class="question-box">
 <label for="pekerjaTidakDibayar"><strong>d.</strong>
                     Pekerja tidak dibayar
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
-<input data-required="true" id="pekerjaTidakDibayar" min="0" name="pekerjaTidakDibayar" placeholder="Jumlah pekerja tidak dibayar" required="" type="number"/>
-</div>
 <div class="field-hint">
             <strong>Pekerja tidak dibayar</strong> adalah pekerja yang tidak menerima upah/gaji
             dan/atau tunjangan sosial dari usaha/perusahaan.
         </div>
+<input data-required="true" id="pekerjaTidakDibayar" min="0" name="pekerjaTidakDibayar" placeholder="Jumlah pekerja tidak dibayar" required="" type="number"/>
+</div>
+<!-- <div class="field-hint">
+            <strong>Pekerja tidak dibayar</strong> adalah pekerja yang tidak menerima upah/gaji
+            dan/atau tunjangan sosial dari usaha/perusahaan.
+        </div> -->
 
 <!-- TAHUN OPERASI -->
 <div class="question-box">
@@ -2335,22 +2300,44 @@ Tuliskan desa/kelurahan lainnya
 <h4 class="subheading"><strong>8.</strong> Rincian Nilai Produksi/Penjualan/Pendapatan Tahun 2025</h4>
 <div class="form-grid">
 <div class="question-box">
-<label for="pendapatan2025"><strong>a.</strong> Nilai produksi/penjualan/pendapatan barang dan jasa
+<label for="pendapatan2025">Nilai produksi/penjualan/pendapatan barang dan jasa
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="pendapatan2025" inputmode="numeric" name="pendapatan2025" placeholder="Rp 0" required="" type="text"/>
 </div>
 <div class="question-box">
-<label for="pendapatanLain2025"><strong>b.</strong> Pendapatan lainnya
+<label for="pendapatanLain2025">Pendapatan lainnya yang dihasilkan
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="pendapatanLain2025" inputmode="numeric" name="pendapatanLain2025" placeholder="Rp 0" required="" type="text"/>
 </div>
 <div class="question-box">
-<label for="asetUsaha2025"><strong>c.</strong> Nilai total aset pada 31 Desember 2025
+<label for="totalPendapatan2025">
+                    Total nilai produksi/penjualan/pendapatan
+                </label>
+<input data-currency-total="true" id="totalPendapatan2025" name="totalPendapatan2025" placeholder="Otomatis dihitung" readonly="" type="text"/>
+</div>
+<div class="question-box">
+<label for="persentaseOnline2025">
+                    Persentase pendapatan dari usaha online(%)
+                    <span aria-label="Wajib diisi" class="required">*</span>
+</label>
+<input data-required="true" id="persentaseOnline2025" inputmode="numeric" max="100" min="0" name="persentaseOnline2025" placeholder="0 - 100" required="" step="1" type="number"/>
+</div>
+<div class="question-box">
+<label for="asetUsaha2025">Nilai aset tanah dan bangunan pada 31 Desember 2025
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="asetUsaha2025" inputmode="numeric" name="asetUsaha2025" placeholder="Rp 0" required="" type="text"/>
+</div>
+<div class="question-box">
+<label for="nilaiAsetSelain2025">Nilai aset selain tanah dan bangunan pada 31 Desember 2025
+                    <span aria-label="Wajib diisi" class="required">*</span>
+</label>
+<input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="nilaiAsetSelain2025" inputmode="numeric" name="nilaiAsetSelain2025" placeholder="Rp 0" required="" type="text"/>
+<div class="field-hint">
+        Contoh: Kamera, laptop, etalase, kompor, dll.
+    </div>
 </div>
 </div>
 <div class="question-box">
@@ -2432,7 +2419,7 @@ Tuliskan desa/kelurahan lainnya
 </div>
 <!-- NILAI ASET SELAIN TANAH DAN BANGUNAN -->
 <div class="question-box">
-<label for="nilaiAsetSelainTanahBangunan"><strong>9.</strong> Nilai aset selain tanah dan bangunan pada 31 Desember 2025
+<label for="nilaiAsetSelainTanahBangunan">Nilai aset selain tanah dan bangunan pada 31 Desember 2025
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="nilaiAsetSelainTanahBangunan" inputmode="numeric" name="nilaiAsetSelainTanahBangunan" placeholder="Rp1.000.000" required="" type="text"/>
@@ -2485,7 +2472,7 @@ Tuliskan desa/kelurahan lainnya
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="nonOperasionalBulan" inputmode="numeric" name="nonOperasionalBulan" placeholder="Rp 0" required="" type="text"/>
 </div>
 <div class="question-box">
-<label for="totalPengeluaranBulan"><strong>f.</strong> Total pengeluaran per bulan
+<label for="totalPengeluaranBulan"><strong>f.</strong> Total pengeluaran
                 </label>
 <input data-currency-total="true" id="totalPengeluaranBulan" name="totalPengeluaranBulan" placeholder="Otomatis dihitung" readonly="" type="text"/>
 </div>
@@ -2618,13 +2605,13 @@ Tuliskan desa/kelurahan lainnya
 <h4 class="subheading"><strong>8.</strong> Rincian Nilai Produksi/Penjualan/Pendapatan Selama Satu Bulan Terakhir</h4>
 <div class="form-grid">
 <div class="question-box">
-<label for="pendapatanBulan"><strong>a.</strong> Nilai produksi/penjualan/pendapatan barang dan jasa
+<label for="pendapatanBulan">Nilai produksi/penjualan/pendapatan barang dan jasa
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="pendapatanBulan" inputmode="numeric" name="pendapatanBulan" placeholder="Rp 0" required="" type="text"/>
 </div>
 <div class="question-box">
-<label for="pendapatanLainBulan"><strong>b.</strong> Pendapatan lainnya
+<label for="pendapatanLainBulan">Pendapatan lainnya yang dihasilkan
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="pendapatanLainBulan" inputmode="numeric" name="pendapatanLainBulan" placeholder="Rp 0" required="" type="text"/>
@@ -2636,14 +2623,14 @@ Tuliskan desa/kelurahan lainnya
 <input data-currency-total="true" id="totalPendapatanBulan" name="totalPendapatanBulan" placeholder="Otomatis dihitung" readonly="" type="text"/>
 </div>
 <div class="question-box">
-<label for="asetUsahaBulan"><strong>c.</strong> Nilai total aset pada 31 Desember 2025
+<label for="asetUsahaBulan">Nilai aset tanah dan bangunan pada akhir bulan yang lalu
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="asetUsahaBulan" inputmode="numeric" name="asetUsahaBulan" placeholder="Rp 0" required="" type="text"/>
 </div>
 <div class="question-box">
 <label for="persentaseOnline">
-                    Persentase pendapatan dari usaha online (%)
+                    Persentase pendapatan dari usaha online(%)
                     <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input data-required="true" id="persentaseOnline" inputmode="numeric" max="100" min="0" name="persentaseOnline" placeholder="0 - 100" required="" step="1" type="number"/>
@@ -2728,7 +2715,7 @@ Tuliskan desa/kelurahan lainnya
 </div>
 <!-- NILAI ASET SELAIN TANAH DAN BANGUNAN PADA AKHIR BULAN YANG LALU -->
 <div class="question-box">
-<label for="nilaiAsetAkhirBulanLalu"><strong>9.</strong> Nilai aset selain tanah dan bangunan pada akhir bulan yang lalu
+<label for="nilaiAsetAkhirBulanLalu">Nilai aset selain tanah dan bangunan pada akhir bulan yang lalu
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000" data-required="true" id="nilaiAsetAkhirBulanLalu" inputmode="numeric" name="nilaiAsetAkhirBulanLalu" placeholder="Rp1.000.000" required="" type="text"/>
@@ -2769,7 +2756,7 @@ Tuliskan desa/kelurahan lainnya
 ================================================== -->
 <div class="question-box conditional-field hidden income-job-block" id="pendapatanPekerjaanField">
 <label><strong>1.</strong>
-        <span class="question-highlight-red">Pendapatan dari pekerjaan,</span> baik berupa uang maupun barang/jasa (gaji, tunjangan, uang makan, honor, lembur, dll):
+        <span class="question-highlight-red">Pendapatan dari pekerjaan,</span> per bulan baik berupa uang maupun barang/jasa (gaji, tunjangan, uang makan, honor, lembur, dll):
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <div class="income-option-details" id="rincianPendapatanPekerjaanField">
@@ -2804,13 +2791,14 @@ Tuliskan desa/kelurahan lainnya
 </div>
 </div>
 </div>
+<div class="field-hint">Masukkan jumlah pendapatan yang diterima per bulan.</div>
 </div>
 <!-- =================================================
      PENDAPATAN DARI USAHA
 ================================================== -->
 <div class="question-box conditional-field hidden income-profit-block" id="pendapatanUsahaField">
 <label><strong>2.</strong>
-        Pendapatan dari keuntungan usaha, baik <span class="question-highlight-red">offline</span> (warung, kos kosan, dll) maupun <span class="question-highlight-red">online</span> (affiliate, online shop, endorse, youtuber, dll) dan usaha pertanian:
+        Pendapatan dari <span class="question-highlight-red">keuntungan usaha</span>, per bulan baik <span class="question-highlight-red">offline</span> (warung, kos kosan, dll) maupun <span class="question-highlight-red">online</span> (affiliate, online shop, endorse, youtuber, dll) dan usaha pertanian:
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <div class="income-option-details" id="pendapatanKeuntunganUsahaField">
@@ -2818,6 +2806,7 @@ Tuliskan desa/kelurahan lainnya
 <label for="pendapatanKeuntunganUsaha"><strong>a.</strong>Total pendapatan</label>
 <input autocomplete="off" data-currency="usaha" data-max-value="1000000000000000" id="pendapatanKeuntunganUsaha" inputmode="numeric" name="pendapatanKeuntunganUsaha" placeholder="Rp 0" type="text"/>
 </div>
+<div class="field-hint">Masukkan jumlah pendapatan yang diterima per bulan.</div>
 </div>
 </div>
 <!-- =================================================
@@ -2825,7 +2814,7 @@ Tuliskan desa/kelurahan lainnya
 ================================================== -->
 <div class="question-box">
 <label for="adaPendapatanLain"><strong>3.</strong>
-        Penerimaan pendapatan dari orang tua/wali dalam rangka untuk biaya kehidupan sehari-hari (transfer dari orang tua/wali):
+    Apakah menerima pendapatan dari orang tua / wali dalam rangka untuk biaya kehidupan sehari-hari (transfer dari orang tua/wali):
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <select class="form-select" data-required="true" id="adaPendapatanLain" name="adaPendapatanLain" required="">
@@ -2839,7 +2828,9 @@ Tuliskan desa/kelurahan lainnya
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="general" data-max-value="1000000000000000" data-required="true" id="totalPendapatanLain" inputmode="numeric" name="totalPendapatanLain" placeholder="Rp 0" type="text"/>
-</div></div>
+</div>
+<div class="field-hint">Masukkan jumlah pendapatan yang diterima per bulan.</div>
+</div>
 <!-- =================================================
      PENDAPATAN LAIN / TRANSFER / PASSIVE INCOME
 ================================================== -->
@@ -2859,7 +2850,9 @@ Tuliskan desa/kelurahan lainnya
         <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="general" data-max-value="1000000000000000" data-required="true" id="totalPendapatanPasif" inputmode="numeric" name="totalPendapatanPasif" placeholder="Rp 0" type="text"/>
-</div></div>
+</div>
+<div class="field-hint">Masukkan jumlah pendapatan yang diterima per bulan.</div>
+</div>
 
 
 <div class="form-footer">
@@ -3285,7 +3278,9 @@ Tuliskan desa/kelurahan lainnya
             <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input data-required="true" id="jumlahMeteran" min="0" name="jumlahMeteran" placeholder="Jumlah meteran" required="" type="number"/>
-</div><div class="question-box conditional-field hidden" id="dayaListrikField">
+<div class="field-hint">Masukkan jumlah meteran listrik yang terpasang.</div>
+</div>
+<div class="question-box conditional-field hidden" id="dayaListrikField">
 <label for="dayaListrik"><strong>b.</strong>
             Daya yang terpasang
             <span aria-label="Wajib diisi" class="required">*</span>
@@ -3319,7 +3314,7 @@ Tuliskan desa/kelurahan lainnya
 </label>
 <input data-required="true" id="nomorMeteran" name="nomorMeteran" placeholder="Masukkan nomor meteran" required="" type="text" maxlength="12"/>
 <div class="field-hint">
-    Untuk pertanyaan poin ini jika tidak tahu, silakan tanyakan kepada pemilik kos
+    Untuk pertanyaan poin ini, silakan lihat di meteran listrik yang terpasang di rumah/kos. Jika tidak tahu, silakan tanyakan kepada pemilik kos
 </div>
 </div>
 <div class="question-box conditional-field hidden" id="pengeluaranListrikField">
@@ -3383,40 +3378,48 @@ Tuliskan desa/kelurahan lainnya
 <!-- =================================================
          PENGELUARAN KELUARGA
     ================================================== -->
-<div class="field-hint ekonomi-note">
+<div class="question-group numbered-question-group asset-section-group">
+
+    <h4 class="subheading"><strong>1.</strong>
+        Pengeluaran Rumah Tangga
+    </h4>
+    <div class="field-hint ekonomi-note">
         Khusus mahasiswa: isi rata-rata pengeluaran pribadi/keluarga
         yang menjadi tanggungan mahasiswa. Gunakan periode bulanan
         atau tahunan sesuai kolom.
     </div>
-<div class="question-group numbered-question-group asset-section-group"><h4 class="subheading"><strong>1.</strong>
-        Pengeluaran Rumah Tangga
-    </h4>
 <div class="form-grid">
 <div class="question-box">
 <label for="pengeluaranMakanan"><strong>a.</strong>
-                Berapa rata-rata pengeluaran makanan seminggu?
+                Berapa rata-rata pengeluaran <span class="question-highlight-red">makanan seminggu?</span>
                 <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="general" data-max-value="1000000000000000" data-required="true" id="pengeluaranMakanan" inputmode="numeric" min="0" name="pengeluaranMakanan" placeholder="Rp 0" required="" type="text"/>
 </div>
 <div class="question-box">
 <label for="pengeluaranNonMakananBulanan"><strong>b.</strong>
-                Berapa rata-rata pengeluaran bukan makanan rutin bulanan?
+                Berapa rata-rata pengeluaran <span class="question-highlight-red">bukan makanan rutin bulanan?</span>
                 <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="general" data-max-value="1000000000000000" data-required="true" id="pengeluaranNonMakananBulanan" inputmode="numeric" min="0" name="pengeluaranNonMakananBulanan" placeholder="Rp 0 (contoh: pengeluaran alat mandi, skincare)" required="" type="text"/>
 </div>
 <div class="question-box">
 <label for="pengeluaranNonMakananTahunan"><strong>c.</strong>
-                Berapa rata-rata pengeluaran bukan makanan rutin tahunan?
+                Berapa rata-rata pengeluaran <span class="question-highlight-red">bukan makanan rutin tahunan?</span>
                 <span aria-label="Wajib diisi" class="required">*</span>
 </label>
 <input autocomplete="off" data-currency="general" data-max-value="1000000000000000" data-required="true" id="pengeluaranNonMakananTahunan" inputmode="numeric" min="0" name="pengeluaranNonMakananTahunan" placeholder="Rp 0 (contoh: pengeluaran UKT, fashion, kontrakan/kos)" required="" type="text"/>
 </div>
 </div>
-</div><div class="question-group numbered-question-group asset-section-group"><h4 class="subheading"><strong>2.</strong>
+</div>
+
+<div class="question-group numbered-question-group asset-section-group">
+    <h4 class="subheading"><strong>2.</strong>
         Kepemilikan Barang
     </h4>
+    <div class="field-hint">
+        Kepemilikan barang wajib milik pribadi dan bukan fasilitas kos/kontrakan/rusunawa/apartemen/honai
+    </div>
 <div class="form-grid">
 <!-- GAS 3 KG -->
 <div class="question-box">
@@ -3590,7 +3593,7 @@ Tuliskan desa/kelurahan lainnya
             ← Kembali
         </button>
 <button class="btn btn-submit" type="submit">
-            ✓ Submit Data 
+            ✓ Submit Data
         </button>
 </div>
 <!-- FOOTER BRANDING KUESIONER -->
@@ -3606,6 +3609,23 @@ Tuliskan desa/kelurahan lainnya
 </form>
 </section>
 <!-- =====================================
+             SUBMIT CONFIRMATION MODAL
+        ====================================== -->
+<div class="submit-confirmation-modal hidden" id="submitConfirmationModal" role="dialog" aria-modal="true" aria-labelledby="submitConfirmationTitle">
+<div class="submit-confirmation-dialog">
+<h3 id="submitConfirmationTitle">Konfirmasi Pengiriman Data</h3>
+<p class="submit-confirmation-message">
+Apakah kamu sudah memastikan seluruh data yang diisi sudah benar dan lengkap?
+<br/><br/>
+Setelah data dikirim, jawaban akan diproses dan tidak dapat diubah kembali.
+</p>
+<div class="submit-confirmation-actions">
+<button class="btn btn-secondary" id="cancelSubmitConfirmation" type="button">Kembali Periksa</button>
+<button class="btn btn-submit" id="confirmSubmitData" type="button">Ya, Kirim Data</button>
+</div>
+</div>
+</div>
+<!-- =====================================
              CONFIRMATION
         ====================================== -->
 <section class="confirmation-card hidden" id="confirmBox">
@@ -3619,7 +3639,7 @@ Tuliskan desa/kelurahan lainnya
                 Data Berhasil Dicatat
             </h2>
 <p>
-                Selamat kamu sudah berhasil mengisi kuesioner Pojok Sensus. Terima kasih atas partisipasinya🤗🙏
+                Terima kasih, <span id="successRespondentName">Responden</span>, sudah bersedia disensus pada Sensus Ekonomi 2026. Data yang diberikan sangat berarti untuk pembangunan ekonomi Indonesia.
             </p>
 <div class="confirmation-detail" id="confirmDetail"></div>
 <button class="btn btn-primary" id="resetBtn" type="button">

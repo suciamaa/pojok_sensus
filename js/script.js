@@ -558,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-   
+
     /* =========================================================
        VALIDATION HELPER
     ========================================================= */
@@ -688,7 +688,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-       
+
         /* HP */
 
         if (fHp) {
@@ -957,68 +957,104 @@ const locationConfirmed = document.getElementById("locationConfirmed");
 const errAddressSearch = document.getElementById("errAddressSearch");
 const fNamaTempat = document.getElementById("fNamaTempat");
 const fAlamat = document.getElementById("fAlamat");
-const fRt = document.getElementById("fRt");
-const fRw = document.getElementById("fRw");
+const fProvinsi = document.getElementById("fProvinsi");
+const fRt = document.getElementById("fRt"); // legacy hidden field
+const fRw = document.getElementById("fRw"); // legacy hidden field
 const fDesa = document.getElementById("fDesa");
+const fSls = document.getElementById("fSls");
 const fKecamatan = document.getElementById("fKecamatan");
 const fKabupaten = document.getElementById("fKabupaten");
-const fKodePos = document.getElementById("fKodePos");
+const fKodePos = document.getElementById("fKodePos"); // legacy hidden field
+const kecamatanLainnyaField = document.getElementById("kecamatanLainnyaField");
+const kecamatanLainnya = document.getElementById("kecamatanLainnya");
+const desaDropdownField = document.getElementById("desaDropdownField");
 const desaLainnyaField = document.getElementById("desaLainnyaField");
 const desaLainnya = document.getElementById("desaLainnya");
+const slsDropdownField = document.getElementById("slsDropdownField");
+const slsLainnyaField = document.getElementById("slsLainnyaField");
+const slsLainnya = document.getElementById("slsLainnya");
+const coordSls = document.getElementById("coordSls");
 const questionError = document.getElementById("questionError");
 
 /* =========================================================
-   BLOK 03 — KECAMATAN → DESA/KELURAHAN
+   BLOK 03 — KECAMATAN → DESA/KELURAHAN → NAMA SLS
+   Data SLS dipertahankan persis sesuai sumber, termasuk
+   duplikasi dan penulisan yang tidak seragam.
 ========================================================= */
-const desaData = {
-    "indralaya": [
-        "005. Lubuk Sakti", "006. Tanjung Gelam", "007. Tanjung Agung",
-        "008. Ulak Bedil", "010. Sudi Mampir", "011. Penyandingan",
-        "012. Talang Aur", "013. Ulak Banding", "014. Muara Penimbung Ulu",
-        "015. Sakatiga", "016. Tanjung Sejaro", "017. Sakatiga Seberang",
-        "019. Tanjung Seteko", "027. Ulak Segelung", "028. Indralaya Mulya",
-        "029. Indralaya Raya", "030. Indralaya Indah", "031. Muara Penimbung Ilir",
-        "032. Tunas Aur", "033. Sejaro Sakti"
-    ],
-    "indralaya utara": [
-        "001. Bakung", "002. Lorok", "003. Parit", "004. Purnajaya",
-        "005. Payakabung", "006. Tanjung Baru", "007. Tanjung Pering",
-        "008. Sungai Rambutan", "009. Suak Batok", "010. Timbangan",
-        "011. Suka Mulia", "012. Pulau Kabal", "013. Tanjung Pule",
-        "014. Permata Baru", "015. Palem Raya", "016. Pulau Semambu"
-    ],
-    "indralaya selatan": [
-        "001. Tanjung Dayang Selatan", "002. Mandi Angin", "003. Sukaraja Baru",
-        "004. Sukaraja Lama", "005. Tanjung Lubuk", "006. Beti",
-        "007. Meranjat Ilir", "008. Meranjat II", "009. Meranjat I",
-        "010. Tebing Gerinting Selatan", "011. Arisan Gading", "012. Meranjat III",
-        "013. Tebing Gerinting Utara", "014. Tanjung Dayang Utara"
-    ]
+const wilayahData = {"INDRALAYA":{"Indralaya Indah":["RT 001 LINGKUNGAN I","RT 002 LINGKUNGAN I","RT 003 LINGKUNGAN II","RT 004 LINGKUNGAN II"],"Indralaya Mulya":["RT 001 LINGKUNGAN I","RT 002 LINGKUNGAN I","RT 003 LINGKUNGAN II","RT 004 LINGKUNGAN II","RT 005 LINGKUNGAN III","RT 006 LINGKUNGAN III","RT 007 LINGKUNGAN IV","RT 008 LINGKUNGAN IV","RT 009 LINGKUNGAN V","RT 010 LINGKUNGAN V"],"Indralaya Raya":["RT 001 LINGKUNGAN LK 1","RT 002 LINGKUNGAN LK 1","RT 003 LINGKUNGAN LK 2","RT 004 LINGKUNGAN LK 2","RT 005 LINGKUNGAN LK 3","RT 006 LINGKUNGAN LK 3","RT 007 LINGKUNGAN LK 4","RT 008 LINGKUNGAN LK 4"],"Lubuk Sakti":["RT 001 DUSUN 1","RT 002 DUSUN II","RT 003 DUSUN III","RT 004 DUSUN IIII","RT 005 DUSUN IIIII","RT 006 DUSUN IIIIII"],"Muara Penimbung Ilir":["RT 001 DUSUN 002","RT 002 DUSUN 002","RT 003 DUSUN 001","RT 004 DUSUN 001","SAWAH PERAIRAN"],"Muara Penimbung Ulu":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3","RT 007 DUSUN 4","RT 008 DUSUN 4","RT 009 DUSUN 5","RT 010 DUSUN 5","RT 011 DUSUN 6","RT 012 DUSUN 6"],"Penyandingan":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN II","RT 004 DUSUN II","KAWASAN PERSAWAHAN"],"Sakatiga":["RT 001 DUSUN 001","RT 002 DUSUN 001","RT 003 DUSUN 002","RT 004 DUSUN 002","RT 005 DUSUN 003","RT 006 DUSUN 003","RT 007 DUSUN 004","RT 008 DUSUN 004","RT 009 DUSUN 005","RT 010 DUSUN 005","RT 011 DUSUN 006","RT 012 DUSUN 006","RT 013 DUSUN 007","RT 014 DUSUN 008","RT 015 DUSUN 008","RT 016 DUSUN 008"],"Sakatiga Seberang":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3","KAWASAN RAWA"],"Sejaro Sakti":["RT 001 DUSUN 1","RT 006 DUSUN 1","RT 003 DUSUN 2","RT 005 DUSUN 2","RT 002 DUSUN 1","RT 004 DUSUN 2","KAWASAN SEMAK BELUKAR"],"Sudi Mampir":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3","RT 007 DUSUN 4","RT 008 DUSUN 4","SAWAH"],"Talang Aur":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3","RT 007 DUSUN 4","RT 008 DUSUN 4","RT 009 DUSUN 5","RT 010 DUSUN 5","RT 011 DUSUN 6","RT 012 DUSUN 6","RAWA-RAWA"],"Tanjung Agung":["RT 001 DUSUN I","RT 002 DUSUN I","RT 003 DUSUN II","RT 004 DUSUN II"],"Tanjung Gelam":["RT 001 DUSUN I","RT 002 DUSUN 1","RT 003 DUSUN II","RT 004 DUSUN II","RT 005 DUSUN III","RT 006 DUSUN III"],"Tanjung Sejaro":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3","RT 007 DUSUN 4","RT 008 DUSUN 4"],"Tanjung Seteko":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3","RT 007 DUSUN 4","RT 008 DUSUN 4","RT 009 DUSUN 5","RT 009 DUSUN 5","RT 010 DUSUN 5","RT 012 DUSUN 6","RT 016 DUSUN 7","RT 017 DUSUN 7","RT 015 DUSUN 6","RT 014 DUSUN 6","RT 013 DUSUN 6","RT 013 DUSUN 6","RT 011 DUSUN 6"],"Tunas Aur":["RT 001 DUSUN 001","RT 003 DUSUN 002","RT 002 DUSUN 001","RT 004 DUSUN 002"],"Ulak Banding":["RT 001 DUSUN 1","RT 002 DUSUN 1"],"Ulak Bedil":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3"],"Ulak Segelung":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3"]},"INDRALAYA SELATAN":{"Arisan Gading":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3"],"Beti":["RT 01 DUSUN 1","RT 02 DUSUN 1","RT 03 DUSUN 2","RT 04 DUSUN 2"],"Mandi Angin":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 01 DUSUN II","RT 02 DUSUN II"],"Meranjat I":["DUSUN I","DUSUN II","DUSUN III","DUSUN IV","DUSUN V","DUSUN VI","DUSUN VII","DUSUN VIII"],"Meranjat II":["DUSUN I","DUSUN I","DUSUN II","DUSUN III","DUSUN IV","DUSUN V","DUSUN VI"],"Meranjat III":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 001 DUSUN 2","RT 002 DUSUN 2","RT 001 DUSUN 3","RT 002 DUSUN 3"],"Meranjat Ilir":["RT 001 DUSUN I","RT 001 DUSUN 2","RT 002 DUSUN I","RT 002 DUSUN 2"],"Sukaraja Baru":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 3","RT 006 DUSUN 3","RT 007 DUSUN 4","RT 008 DUSUN 4"],"Sukaraja Lama":["RT 01 DUSUN I","RT 02 DUSUN I","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III"],"Tanjung Dayang Selatan":["RT 001 DUSUN 001","RT 002 DUSUN 001","RT 003 DUSUN 002","RT 004 DUSUN 002","RT 005 DUSUN 003","RT 006 DUSUN 003","RT 007 DUSUN 004","RT 008 DUSUN 004","RT 009 DUSUN 005","RT 010 DUSUN 005"],"Tanjung Dayang Utara":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2"],"Tanjung Lubuk":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 001 DUSUN 2","RT 002 DUSUN 2","RT 001 DUSUN 3","RT 002 DUSUN 3","RT 001 DUSUN 4","RT 002 DUSUN 4"],"Tebing Gerinting Selatan":["DUSUN I","DUSUN II","DUSUN III","DUSUN IV"],"Tebing Gerinting Utara":["DUSUN I","DUSUN I","DUSUN II","DUSUN III","DUSUN IV"]},"INDRALAYA UTARA":{"Bakung":["RT 01 DUSUN I","RT 02 DUSUN I","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III"],"Lorok":["RT 01 DUSUN I","RT 02 DUSUN I","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III"],"Palem Raya":["RT 001 DUSUN I","RT 002 DUSUN I","RT 004 DUSUN I","RT 005 DUSUN II","RT 005 DUSUN II","RT 006 DUSUN II","RT 010 DUSUN III","RT 009 DUSUN III","RT 012 DUSUN III","RT 008 DUSUN I","RT 003 DUSUN I","RT 011 DUSUN III","RT 007 DUSUN II"],"Parit":["RT 01 DUSUN 1","RT 02 DUSUN 1","RT 03 DUSUN 2","RT 04 DUSUN 2","RT 05 DUSUN 3","RT 06 DUSUN 3"],"Payakabung":["RT 001 DUSUN I","RT 002 DUSUN I","RT 003 DUSUN I","RT 004 DUSUN II","RT 005 DUSUN II","RT 006 DUSUN II","RT 007 DUSUN III","RT 008 DUSUN III","RT 009 DUSUN III"],"Permata Baru":["RT 01 DUSUN I","RT 02 DUSUN I","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III","RT 07 DUSUN IV","RT 08 DUSUN IV"],"Pulau Kabal":["RT 01 DUSUN I","RT 02 DUSUN I","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III","PERKEBUNAN SAWIT"],"Pulau Semambu":["RT 01 DUSUN I","RT 02 DUSUN I","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III","RT 07 DUSUN IV","RT 08 DUSUN IV","RT 09 DUSUN V","RT 10 DUSUN V","RT 11 DUSUN VI","RT 12 DUSUN VI"],"Purnajaya":["RT 001 DUSUN I","RT 002 DUSUN I","RT 003 DUSUN II","RT 004 DUSUN II","RT 005 DUSUN III","RT 006 DUSUN III"],"Suak Batok":["RT 01 DUSUN I","RT 02 DUSUN IV","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III"],"Suka Mulia":["RT 001 DUSUN 1","RT 002 DUSUN 1","RT 003 DUSUN 2","RT 004 DUSUN 2","RT 005 DUSUN 2","RT 006 DUSUN 3","RT 007 DUSUN 3","RT 008 DUSUN 4","RT 009 DUSUN 4"],"Sungai Rambutan":["RT 01 DUSUN 1","RT 02 DUSUN 1","RT 03 DUSUN 2","RT 04 DUSUN 2","RT 04 DUSUN 2","RT 05 DUSUN 3","RT 06 DUSUN 3","RT 07 DUSUN 3","RT 08 DUSUN 3","RT 09 DUSUN 4","RT 10 DUSUN 4","RT 11 DUSUN 4","RT 12 DUSUN 4","WILAYAH PERKEBUNAN SAWIT DAN KARET","RT 13 DUSUN 5  5","RT 14 DUSUN 5  5"],"Tanjung Baru":["RT 01 DUSUN 1","RT 02 DUSUN 1","RT 03 DUSUN 3","RT 04 DUSUN 3","RT 05 DUSUN 2","RT 06 DUSUN 2","RT 07 DUSUN 02"],"Tanjung Pering":["RT 01 DUSUN I","RT 02 DUSUN I","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III","RT 07 DUSUN IV","RT 08 DUSUN IV"],"Tanjung Pule":["RT 01 DUSUN I","RT 02 DUSUN I","RT 03 DUSUN II","RT 04 DUSUN II","RT 05 DUSUN III","RT 06 DUSUN III","RT 07 DUSUN IV","RT 08 DUSUN IV","RT 09 DUSUN I","RT 10 DUSUN I","PERKEBUNAN SAWIT DAN KARET"],"Timbangan":["RT 001 LINGKUNGAN I","RT 002 LINGKUNGAN I","RT 003 LINGKUNGAN II","RT 004 LINGKUNGAN II","RT 005 LINGKUNGAN III","RT 006 LINGKUNGAN III","RT 007 LINGKUNGAN IV","RT 008 LINGKUNGAN IV","RT 009 LINGKUNGAN V","RT 010 LINGKUNGAN V","RT 011 LINGKUNGAN II","RT 012 LINGKUNGAN III","RT 013 LINGKUNGAN IV"]}};
+
+window.PojokSensusWilayahData = wilayahData;
+
+const desaData = Object.fromEntries(
+    Object.entries(wilayahData).map(([kecamatan, desaMap]) => [
+        kecamatan,
+        Object.keys(desaMap)
+    ])
+);
+
+const normalizedKecamatanKey = value => {
+    const normalized = normalizeLocationName(value);
+    return Object.keys(wilayahData).find(key =>
+        normalizeLocationName(key) === normalized
+    ) || "";
 };
 
-function hideDesaLainnya() {
+function hideCustomResidenceFields() {
+    kecamatanLainnyaField?.classList.add("hidden");
     desaLainnyaField?.classList.add("hidden");
+    slsLainnyaField?.classList.add("hidden");
+    desaDropdownField?.classList.remove("hidden");
+    slsDropdownField?.classList.remove("hidden");
+    document.getElementById("kecamatanAddressRow")?.classList.remove("has-other");
+
+    if (kecamatanLainnya) {
+        kecamatanLainnya.value = "";
+        kecamatanLainnya.classList.remove("valid", "invalid");
+    }
     if (desaLainnya) {
         desaLainnya.value = "";
         desaLainnya.classList.remove("valid", "invalid");
     }
+    if (slsLainnya) {
+        slsLainnya.value = "";
+        slsLainnya.classList.remove("valid", "invalid");
+    }
 }
 
-function showDesaLainnya() {
+function showResidenceKecamatanLainnya() {
+    // Saat Kecamatan = Lainnya, dropdown wilayah tetap terlihat sebagai
+    // field referensi, sementara input manual ditampilkan di sebelahnya.
+    kecamatanLainnyaField?.classList.remove("hidden");
+    desaDropdownField?.classList.remove("hidden");
+    slsDropdownField?.classList.remove("hidden");
     desaLainnyaField?.classList.remove("hidden");
+    slsLainnyaField?.classList.remove("hidden");
+    document.getElementById("kecamatanAddressRow")?.classList.add("has-other");
+
+    if (fDesa) {
+        fDesa.innerHTML = '<option value="">Tidak tersedia untuk Kecamatan Lainnya</option>';
+        fDesa.value = "";
+        fDesa.disabled = true;
+    }
+    if (fSls) {
+        fSls.innerHTML = '<option value="">Tidak tersedia untuk Kecamatan Lainnya</option>';
+        fSls.value = "";
+        fSls.disabled = true;
+    }
 }
 
 function populateDesaOptions(kecamatan, selectedDesa = "") {
     if (!fDesa) return;
     fDesa.innerHTML = "";
 
-    if (!kecamatan || !desaData[kecamatan]) {
+    const key = normalizedKecamatanKey(kecamatan);
+    if (!key) {
         fDesa.disabled = true;
         const option = document.createElement("option");
         option.value = "";
         option.textContent = "Pilih kecamatan terlebih dahulu";
         fDesa.appendChild(option);
-        hideDesaLainnya();
+        populateSlsOptions("", "");
         return;
     }
 
@@ -1028,36 +1064,99 @@ function populateDesaOptions(kecamatan, selectedDesa = "") {
     defaultOption.textContent = "Pilih desa/kelurahan";
     fDesa.appendChild(defaultOption);
 
-    desaData[kecamatan].forEach(desa => {
+    Object.keys(wilayahData[key]).forEach(desa => {
         const option = document.createElement("option");
         option.value = desa;
         option.textContent = desa;
         fDesa.appendChild(option);
     });
 
-    const lainnyaOption = document.createElement("option");
-    lainnyaOption.value = "lainnya";
-    lainnyaOption.textContent = "Lainnya";
-    fDesa.appendChild(lainnyaOption);
-
-    if (selectedDesa === "lainnya") {
-        fDesa.value = "lainnya";
-        showDesaLainnya();
-    } else if (selectedDesa) {
-        const match = Array.from(fDesa.options).find(opt => opt.value.toLowerCase() === String(selectedDesa).toLowerCase());
+    if (selectedDesa) {
+        const match = Array.from(fDesa.options).find(opt =>
+            opt.value.toLowerCase() === String(selectedDesa).toLowerCase()
+        );
         if (match) fDesa.value = match.value;
+    }
+
+    populateSlsOptions(fDesa.value || "");
+}
+
+function populateSlsOptions(desa, selectedSls = "") {
+    if (!fSls) return;
+    fSls.innerHTML = "";
+
+    const key = normalizedKecamatanKey(fKecamatan?.value || "");
+    const slsList = key && desa && wilayahData[key]?.[desa]
+        ? wilayahData[key][desa]
+        : [];
+
+    if (!key || !desa || !slsList.length) {
+        fSls.disabled = true;
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = desa ? "Data SLS tidak tersedia" : "Pilih desa terlebih dahulu";
+        fSls.appendChild(option);
+        return;
+    }
+
+    fSls.disabled = false;
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Pilih Nama SLS";
+    fSls.appendChild(defaultOption);
+
+    slsList.forEach(sls => {
+        const option = document.createElement("option");
+        option.value = sls;
+        option.textContent = sls;
+        fSls.appendChild(option);
+    });
+
+    if (selectedSls !== "") {
+        const index = slsList.findIndex(sls => sls === selectedSls);
+        if (index >= 0) fSls.selectedIndex = index + 1;
     }
 }
 
 function resetDesaByKecamatan() {
-    populateDesaOptions("");
+    if (fDesa) {
+        fDesa.value = "";
+        fDesa.innerHTML = '<option value="">Pilih kecamatan terlebih dahulu</option>';
+        fDesa.disabled = true;
+    }
+    if (fSls) {
+        fSls.value = "";
+        fSls.innerHTML = '<option value="">Pilih desa terlebih dahulu</option>';
+        fSls.disabled = true;
+    }
 }
 
-function normalizeLocationName(value) {
-    return String(value || "")
-        .toLowerCase()
-        .replace(/^\d+\.\s*/, "")
-        .trim();
+function resetSlsByDesa() {
+    if (fSls) {
+        fSls.value = "";
+        populateSlsOptions("");
+    }
+}
+
+function getResidenceKecamatanValue() {
+    if (fKecamatan?.value === "Lainnya") {
+        return kecamatanLainnya?.value?.trim() || "";
+    }
+    return fKecamatan?.value?.trim() || "";
+}
+
+function getDesaFormValue() {
+    if (fKecamatan?.value === "Lainnya") {
+        return desaLainnya?.value?.trim() || "";
+    }
+    return fDesa?.value?.trim() || "";
+}
+
+function getSlsFormValue() {
+    if (fKecamatan?.value === "Lainnya") {
+        return slsLainnya?.value?.trim() || "";
+    }
+    return fSls?.value?.trim() || "";
 }
 
 function setKecamatanFromExternal(value, villageValue = "") {
@@ -1068,66 +1167,91 @@ function setKecamatanFromExternal(value, villageValue = "") {
         normalizeLocationName(opt.textContent) === normalized
     );
 
-    if (!option || !option.value) {
-        fKecamatan.value = "";
-        resetDesaByKecamatan();
+    if (!option || !option.value || option.value === "Lainnya") {
+        fKecamatan.value = "Lainnya";
+        showResidenceKecamatanLainnya();
+        if (kecamatanLainnya) kecamatanLainnya.value = value || "";
+        if (desaLainnya) desaLainnya.value = villageValue || "";
         return;
     }
 
     fKecamatan.value = option.value;
+    hideCustomResidenceFields();
     populateDesaOptions(option.value);
 
     if (villageValue) {
         const villageNormalized = normalizeLocationName(villageValue);
         const villageOption = Array.from(fDesa.options).find(opt =>
-            opt.value !== "lainnya" &&
-            (normalizeLocationName(opt.value) === villageNormalized || normalizeLocationName(opt.textContent) === villageNormalized)
+            opt.value && normalizeLocationName(opt.value) === villageNormalized
         );
 
         if (villageOption) {
             fDesa.value = villageOption.value;
-            hideDesaLainnya();
+            populateSlsOptions(fDesa.value);
         } else {
-            fDesa.value = "lainnya";
-            if (desaLainnya) desaLainnya.value = villageValue;
-            showDesaLainnya();
+            // External geocoding cannot invent a SLS. Keep the
+            // respondent's dependent list intact.
+            fDesa.value = "";
+            resetSlsByDesa();
         }
     }
 }
 
-function getDesaFormValue() {
-    if (fDesa?.value === "lainnya") return desaLainnya?.value?.trim() || "";
-    return fDesa?.value?.trim() || "";
-}
-
 function initializeKecamatanDesaFields() {
-    if (!fKecamatan || !fDesa) return;
+    if (!fKecamatan || !fDesa || !fSls) return;
 
-    populateDesaOptions(fKecamatan.value || "");
-    hideDesaLainnya();
+    fProvinsi && (fProvinsi.value = "Sumatera Selatan");
+    fKabupaten && (fKabupaten.value = "Ogan Ilir");
+    hideCustomResidenceFields();
+    resetDesaByKecamatan();
 
     fKecamatan.addEventListener("change", function () {
-        hideDesaLainnya();
+        resetDesaByKecamatan();
+        hideCustomResidenceFields();
+
+        if (fKecamatan.value === "Lainnya") {
+            showResidenceKecamatanLainnya();
+            return;
+        }
+
         populateDesaOptions(fKecamatan.value);
+        if (selectedLatLng) {
+            updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
+        }
+        window.syncAllBusinessAddressesFromResidence?.();
     });
 
     fDesa.addEventListener("change", function () {
-        if (fDesa.value === "lainnya") {
-            showDesaLainnya();
-        } else {
-            hideDesaLainnya();
-        }
-
+        resetSlsByDesa();
+        if (fDesa.value) populateSlsOptions(fDesa.value);
         if (selectedLatLng) {
             updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
         }
+        window.syncAllBusinessAddressesFromResidence?.();
     });
 
-    desaLainnya?.addEventListener("input", function () {
+    fSls.addEventListener("change", function () {
         if (selectedLatLng) {
             updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
         }
+        window.syncAllBusinessAddressesFromResidence?.();
     });
+
+    [kecamatanLainnya, desaLainnya, slsLainnya].forEach(field => {
+        field?.addEventListener("input", function () {
+            if (selectedLatLng) {
+                updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
+            }
+            window.syncAllBusinessAddressesFromResidence?.();
+        });
+    });
+}
+
+function normalizeLocationName(value) {
+    return String(value || "")
+        .toLowerCase()
+        .replace(/^\d+\.\s*/, "")
+        .trim();
 }
 
 initializeKecamatanDesaFields();
@@ -1265,12 +1389,11 @@ function canGeocodeFromFields() {
 function buildAddressQuery() {
     return [
         fAlamat?.value.trim(),
-        fRt?.value.trim() ? `RT ${fRt.value.trim()}` : "",
-        fRw?.value.trim() ? `RW ${fRw.value.trim()}` : "",
+        getSlsFormValue(),
         getDesaFormValue(),
-        fKecamatan?.value.trim(),
+        getResidenceKecamatanValue(),
         fKabupaten?.value.trim() || "Ogan Ilir",
-        "Sumatera Selatan",
+        fProvinsi?.value.trim() || "Sumatera Selatan",
         "Indonesia"
     ].filter(Boolean).join(", ");
 }
@@ -1278,9 +1401,10 @@ function buildAddressQuery() {
 function buildSuggestQuery() {
     const parts = [
         fAlamat?.value.trim(),
-        fKecamatan?.value.trim(),
+        getDesaFormValue(),
+        getResidenceKecamatanValue(),
         fKabupaten?.value.trim() || "Ogan Ilir",
-        "Sumatera Selatan",
+        fProvinsi?.value.trim() || "Sumatera Selatan",
         "Indonesia"
     ].filter(Boolean);
     return parts.join(", ");
@@ -1292,11 +1416,11 @@ function updateLocationDetailFromForm(lat, lng) {
     // Nominatim/search results are never used to populate these fields.
     const nama = fNamaTempat?.value.trim() || "";
     const alamat = fAlamat?.value.trim() || "";
-    const rt = fRt?.value.trim() || "";
-    const rw = fRw?.value.trim() || "";
     const desa = getDesaFormValue();
-    const kecamatan = fKecamatan?.value.trim() || "";
+    const sls = getSlsFormValue();
+    const kecamatan = getResidenceKecamatanValue();
     const kabupaten = fKabupaten?.value.trim() || "Ogan Ilir";
+    const provinsi = fProvinsi?.value.trim() || "Sumatera Selatan";
     const kodePos = fKodePos?.value.trim() || "";
 
     selectedLocationName.textContent = nama || "Belum diisi";
@@ -1305,15 +1429,11 @@ function updateLocationDetailFromForm(lat, lng) {
     const addressParts = [];
     if (alamat) addressParts.push(alamat);
 
-    const rtRw = [
-        rt ? `RT ${rt}` : "",
-        rw ? `RW ${rw}` : ""
-    ].filter(Boolean).join(" / ");
-    if (rtRw) addressParts.push(rtRw);
-
+    if (sls) addressParts.push(sls);
     if (desa) addressParts.push(desa);
     if (kecamatan) addressParts.push(kecamatan);
     if (kabupaten) addressParts.push(kabupaten);
+    if (provinsi) addressParts.push(provinsi);
     if (kodePos) addressParts.push(kodePos);
 
     const displayAddress = addressParts.length
@@ -1342,6 +1462,7 @@ function updateLocationDetailFromForm(lat, lng) {
     }
 
     coordDesa.textContent = desa || "—";
+    coordSls.textContent = sls || "—";
     coordKec.textContent = kecamatan || "—";
     coordKabupaten.textContent = kabupaten || "—";
     coordKodePos.textContent = kodePos || "—";
@@ -1395,6 +1516,7 @@ function applyAddressSuggestion(result) {
     const district = getAddressComponent(address, ["city_district", "district", "municipality", "county"]);
     if (district) setKecamatanFromExternal(district, village);
 
+    fProvinsi.value = "Sumatera Selatan";
     fKabupaten.value = "Ogan Ilir";
     if (address.postcode) fKodePos.value = address.postcode;
 
@@ -1562,6 +1684,7 @@ function applyReverseAddress(result, options = {}) {
     if (district && (overwrite || !(fKecamatan?.value.trim()))) {
         setKecamatanFromExternal(district, village);
     }
+    fProvinsi.value = "Sumatera Selatan";
     fKabupaten.value = "Ogan Ilir";
     if (overwrite || !(fKodePos?.value.trim())) {
         if (postcode) fKodePos.value = postcode;
@@ -1572,7 +1695,8 @@ function applyReverseAddress(result, options = {}) {
     selectedLocationName.textContent = fNamaTempat?.value.trim() || result.name || "Lokasi terpilih";
     selectedFullAddress.textContent = buildAddressQuery() || result.display_name || "—";
     coordDesa.textContent = getDesaFormValue() || "—";
-    coordKec.textContent = fKecamatan.value.trim() || "—";
+    coordSls.textContent = getSlsFormValue() || "—";
+    coordKec.textContent = getResidenceKecamatanValue() || "—";
     coordKabupaten.textContent = "Ogan Ilir";
     coordKodePos.textContent = fKodePos.value.trim() || "—";
     selectedCoordinates.textContent = `${Number(result.lat).toFixed(6)}, ${Number(result.lon).toFixed(6)}`;
@@ -1988,49 +2112,48 @@ function validateLocationStep() {
         showError("errResidence", false);
     }
 
-    const fields = [
-        [fNamaTempat, "errNamaTempat", value => value.length >= 2],
-        [fAlamat, "errAlamat", value => value.length >= 5],
+    const namaValid = (fNamaTempat?.value || "").trim().length >= 2;
+    const alamatValid = (fAlamat?.value || "").trim().length >= 5;
+    const provinsiValid = (fProvinsi?.value || "").trim() === "Sumatera Selatan";
+    const kabupatenValid = (fKabupaten?.value || "").trim() === "Ogan Ilir";
 
-        // RT dan RW TIDAK WAJIB
-        // Kalau kosong = valid
-        // Kalau diisi = harus 1–3 digit
-        [fRt, "errRt", value => value === "" || /^\d{1,3}$/.test(value)],
-        [fRw, "errRw", value => value === "" || /^\d{1,3}$/.test(value)],
+    setFieldState(fNamaTempat, namaValid);
+    setFieldState(fAlamat, alamatValid);
+    setFieldState(fProvinsi, provinsiValid);
+    setFieldState(fKabupaten, kabupatenValid);
+    showError("errNamaTempat", !namaValid);
+    showError("errAlamat", !alamatValid);
 
-        [fDesa, "errDesa", value => value.length >= 2],
-        [fKecamatan, "errKecamatan", value => value.length >= 2],
-        [fKodePos, "errKodePos", value => value === "" || /^\d{5}$/.test(value)]
-    ];
+    valid = valid && namaValid && alamatValid && provinsiValid && kabupatenValid;
 
-    fields.forEach(([field, errorId, test]) => {
-        if (!field) return;
+    if (fKecamatan?.value === "Lainnya") {
+        const customKecValid = (kecamatanLainnya?.value || "").trim().length >= 2;
+        const customDesaValid = (desaLainnya?.value || "").trim().length >= 2;
 
-        const value = field === fDesa ? getDesaFormValue() : field.value.trim();
-        const fieldValid = test(value);
-
-        setFieldState(field, fieldValid);
-        showError(errorId, !fieldValid);
-
-        if (!fieldValid) {
-            valid = false;
-        }
-    });
-
-    if (fDesa?.value === "lainnya") {
-        const customDesaValid = getDesaFormValue().length >= 2;
+        setFieldState(kecamatanLainnya, customKecValid);
         setFieldState(desaLainnya, customDesaValid);
-        showError("errDesa", !customDesaValid);
-        if (!customDesaValid) valid = false;
+        showError("errKecamatanLainnya", !customKecValid);
+        showError("errDesaLainnya", !customDesaValid);
+
+        valid = valid && customKecValid && customDesaValid;
+    } else {
+        const kecValid = (fKecamatan?.value || "").trim().length >= 2;
+        const desaValid = (fDesa?.value || "").trim().length >= 2;
+
+        setFieldState(fKecamatan, kecValid);
+        setFieldState(fDesa, desaValid);
+        showError("errKecamatan", !kecValid);
+        showError("errDesa", !desaValid);
+
+        valid = valid && kecValid && desaValid;
     }
 
-    const kabupatenValid =
-        (fKabupaten?.value || "").trim().toLowerCase() === "ogan ilir";
-
-    setFieldState(fKabupaten, kabupatenValid);
-
-    if (!kabupatenValid) {
-        valid = false;
+    // Nama SLS tidak wajib, tetapi jika diisi harus merupakan nilai aktif.
+    const slsValue = getSlsFormValue();
+    if (fKecamatan?.value === "Lainnya") {
+        setFieldState(slsLainnya, true);
+    } else if (fSls) {
+        setFieldState(fSls, true);
     }
 
     if (!selectedLatLng || !locationValid) {
@@ -2043,7 +2166,7 @@ function validateLocationStep() {
     return valid;
 }
 
-[fAlamat, fDesa, fKecamatan, fRt, fRw, fKodePos].forEach(field => {
+[fAlamat, fNamaTempat, fDesa, fKecamatan, fSls, kecamatanLainnya, desaLainnya, slsLainnya].forEach(field => {
     field?.addEventListener("input", () => {
         // Keep the existing geotag fixed. Typing the manual address
         // must NOT move or replace the selected GPS/search coordinate.
@@ -2053,26 +2176,7 @@ function validateLocationStep() {
             updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
         }
     });
-
-    field?.addEventListener("change", () => {
-        if (selectedLatLng) {
-            updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
-        }
-    });
 });
-
-fNamaTempat?.addEventListener("input", () => {
-    if (selectedLatLng) {
-        updateLocationDetailFromForm(selectedLatLng.lat, selectedLatLng.lng);
-    }
-});
-
-document.addEventListener("click", event => {
-    if (!addressSuggestions?.contains(event.target) && event.target !== fAlamat) {
-        hideAddressSuggestions();
-    }
-});
-
 // =========================================================
 // SIMPAN TAHAP 1–3 KE DATABASE SEBELUM MASUK KUESIONER
 // =========================================================
@@ -2088,11 +2192,22 @@ async function saveProfileBeforeQuestionnaire() {
         programStudi: fProdi?.selectedOptions?.[0]?.textContent?.trim() || fProdi?.value || "",
         tempatTinggal: selectedResidence || "",
         namaTempat: fNamaTempat?.value?.trim() || "",
+        provinsi: fProvinsi?.value?.trim() || "Sumatera Selatan",
         alamat: fAlamat?.value?.trim() || "",
-        rt: fRt?.value?.trim() || "",
-        rw: fRw?.value?.trim() || "",
+        rt: "",
+        rw: "",
         desa: getDesaFormValue(),
-        kecamatan: fKecamatan?.value?.trim() || "",
+        desaLainnya: kecamatanLainnya?.value?.trim() && fKecamatan?.value === "Lainnya"
+            ? desaLainnya?.value?.trim() || ""
+            : "",
+        sls: getSlsFormValue(),
+        slsLainnya: fKecamatan?.value === "Lainnya"
+            ? slsLainnya?.value?.trim() || ""
+            : "",
+        kecamatan: getResidenceKecamatanValue(),
+        kecamatanLainnya: fKecamatan?.value === "Lainnya"
+            ? kecamatanLainnya?.value?.trim() || ""
+            : "",
         kabupaten: "Ogan Ilir",
         kodePos: fKodePos?.value?.trim() || "",
         latitude: selectedLatLng.lat,
@@ -2108,7 +2223,7 @@ async function saveProfileBeforeQuestionnaire() {
     const fd = new FormData();
     Object.entries(main).forEach(([key, value]) => fd.append(key, value ?? ""));
 
-    const response = await fetch("api/save_profile", { method: "POST", body: fd });
+    const response = await fetch("api/save_profile.php", { method: "POST", body: fd });
     const result = await response.json().catch(() => ({ success: false, message: "Respons server tidak valid." }));
     if (!response.ok || !result.success) {
         throw new Error(result.message || "Data tahap 1–3 gagal disimpan.");
@@ -2258,13 +2373,13 @@ if (resetBtn) {
         // Mulai responden baru: buang draft, id_key, dan jawaban responden sebelumnya.
         try { localStorage.removeItem("sensusEkonomiMahasiswaDraft"); } catch {}
 
-        [fNim, fAngkatan, fNama, fHp, fNamaTempat, fAlamat, fRt, fRw, fKodePos].forEach(field => {
+        [fNim, fAngkatan, fNama, fHp, fNamaTempat, fAlamat, fRt, fRw, fKodePos, fSls, kecamatanLainnya, desaLainnya, slsLainnya].forEach(field => {
             if (field) field.value = "";
         });
         if (fKecamatan) fKecamatan.value = "";
         resetDesaByKecamatan();
-        if (desaLainnya) desaLainnya.value = "";
-        hideDesaLainnya();
+        hideCustomResidenceFields();
+        if (fProvinsi) fProvinsi.value = "Sumatera Selatan";
         if (fKabupaten) fKabupaten.value = "Ogan Ilir";
         fFakultas.value = "";
         fProdi.innerHTML = '<option value="">Pilih fakultas terlebih dahulu</option>';

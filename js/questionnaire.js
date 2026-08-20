@@ -527,7 +527,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // =================================================
             // Data kuesioner TIDAK disimpan otomatis.
             // Yang disimpan sebagai draft hanya data registrasi
-            // (tahap 1-3) melalui endpoint Node.js /api/save_profile.
+            // (tahap 1-3) melalui endpoint PHP /api/save_profile.
 
             clearQuestionnaireForm();
 
@@ -536,7 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // =================================================
             try {
                 const response = await fetch(
-                    `api/get_profile?nim=${encodeURIComponent(activeNIM)}&t=${Date.now()}`,
+                    `api/get_profile.php?nim=${encodeURIComponent(activeNIM)}&t=${Date.now()}`,
                     { cache: "no-store" }
                 );
 
@@ -1458,7 +1458,7 @@ document.addEventListener("DOMContentLoaded", () => {
             d: makeCard("d", "Pekerja"),
             e: makeCard("e", "Rincian Pengeluaran Selama Satu Bulan Terakhir"),
             f: makeCard("f", "Rincian Nilai Produksi/Penjualan/Pendapatan Selama Satu Bulan Terakhir"),
-            g: makeCard("g", "Nilai aset selain tanah dan bangunan pada akhir bulan yang lalu")
+            g: makeCard("g", "Nilai aset pada akhir bulan yang lalu")
         };
 
         // a: keep the existing form-grid and all its fields together.
@@ -1513,11 +1513,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         .trim() || "";
                     if (/^\d+\.?\s*Nilai aset selain tanah dan bangunan/i.test(labelText) ||
                         /^Nilai aset selain tanah dan bangunan/i.test(labelText)) {
-                        current = document.createElement("div");
-                        current.className = "conditional-field usaha-period-branch";
-                        current.id = `${periodPrefix}_g`;
-                        current.dataset.periodGroup = "g";
-                        cards.g.appendChild(current);
+                        let gBranch = cards.g.querySelector(`:scope > #${periodPrefix}_g`);
+                        if (!gBranch) {
+                            gBranch = document.createElement("div");
+                            gBranch.className = "conditional-field usaha-period-branch";
+                            gBranch.id = `${periodPrefix}_g`;
+                            gBranch.dataset.periodGroup = "g";
+                            cards.g.appendChild(gBranch);
+                        }
+                        current = gBranch;
                         current.appendChild(child);
                         return;
                     }
@@ -1530,6 +1534,66 @@ document.addEventListener("DOMContentLoaded", () => {
 
         splitBranch(beforeBranch, "usahaBranchBefore2026");
         splitBranch(currentBranch, "usahaBranch2026");
+
+        // Pindahkan rincian aset dari cabang f ke cabang g agar f hanya
+        // berisi f.1-f.4 dan g berisi g.1-g.2. ID/name input yang sudah
+        // ada tetap dipertahankan.
+        const moveAssetBoxesToG = (fromCard, assetIdPrefixes) => {
+            if (!fromCard) return;
+            assetIdPrefixes.forEach(assetIdPrefix => {
+                fromCard.querySelectorAll(`[id^="${assetIdPrefix}"]`).forEach(input => {
+                    const assetBox = input.closest(".question-box");
+                    if (!assetBox) return;
+
+                    // Keep the asset in the same period branch. For example,
+                    // usahaBranch2026_f -> usahaBranch2026_g and
+                    // usahaBranchBefore2026_f -> usahaBranchBefore2026_g.
+                    const sourceBranch = input.closest(".usaha-period-branch");
+                    let gBranch = null;
+                    if (sourceBranch?.id) {
+                        const gId = sourceBranch.id.replace(/_f$/, "_g");
+                        gBranch = cards.g.querySelector(`#${gId}`);
+                    }
+                    if (!gBranch) {
+                        gBranch = document.createElement("div");
+                        gBranch.className = "conditional-field usaha-period-branch";
+                        gBranch.id = sourceBranch?.id
+                            ? sourceBranch.id.replace(/_f$/, "_g")
+                            : `usahaBranchAsset_g_${assetIdPrefix}`;
+                        gBranch.dataset.periodGroup = "g";
+                        cards.g.appendChild(gBranch);
+                    }
+                    gBranch.appendChild(assetBox);
+                });
+            });
+        };
+        // The source contains one legacy duplicate for the 2025 non-land/building
+        // asset field. Keep the canonical 2025 field and remove only that duplicate.
+        cards.g.querySelectorAll('[id^="nilaiAsetSelainTanahBangunan"]').forEach(input => {
+            input.closest(".question-box")?.remove();
+        });
+        moveAssetBoxesToG(cards.f, [
+            "asetUsaha2025",
+            "nilaiAsetSelain2025",
+            "asetUsahaBulan",
+            "nilaiAsetAkhirBulanLalu"
+        ]);
+
+        // Pastikan urutan pertanyaan Blok G selalu konsisten:
+        // g.1 tanah dan bangunan, lalu g.2 selain tanah dan bangunan.
+        // Jangan bergantung pada urutan field pada source/branch lama.
+        cards.g.querySelectorAll(":scope > .usaha-period-branch").forEach(branch => {
+            const boxes = [...branch.querySelectorAll(":scope > .question-box")];
+            boxes.sort((a, b) => {
+                const textA = a.querySelector(":scope > label")?.textContent.replace(/\s+/g, " ").trim() || "";
+                const textB = b.querySelector(":scope > label")?.textContent.replace(/\s+/g, " ").trim() || "";
+                const isLandA = /tanah dan bangunan/i.test(textA) && !/selain tanah dan bangunan/i.test(textA);
+                const isLandB = /tanah dan bangunan/i.test(textB) && !/selain tanah dan bangunan/i.test(textB);
+                if (isLandA !== isLandB) return isLandA ? -1 : 1;
+                return 0;
+            });
+            boxes.forEach(box => branch.appendChild(box));
+        });
 
         Object.values(cards).forEach(card => template.appendChild(card));
 
@@ -1644,30 +1708,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function numberDirectQuestionBoxes(container, prefix) {
         let n = 0;
-        container.querySelectorAll(".question-box").forEach(box => {
+        container.querySelectorAll(":scope > .question-box, :scope > .form-grid > .question-box, :scope > .conditional-field > .question-box, :scope > .conditional-field > .form-grid > .question-box").forEach(box => {
             if (box.parentElement?.closest(".question-box")) return;
             const label = box.querySelector(":scope > label");
             if (!label) return;
             const text = label.textContent.replace(/\s+/g, " ").trim();
             if (!text || /^Petunjuk:?$/i.test(text)) return;
 
-            // Helper/kalkulasi pada bagian f tetap ada, tetapi bukan
-            // sub-pertanyaan sehingga tidak mengambil nomor f.x.
-            if (prefix === "f" && (
-                /Total nilai produksi\/penjualan\/pendapatan/i.test(text) ||
-                /Persentase pendapatan dari usaha online/i.test(text)
-            )) {
-                label.querySelector(":scope > strong:first-child")?.remove();
-                return;
-            }
-
             n += 1;
-            let strong = label.querySelector(":scope > strong:first-child");
-            if (!strong) {
-                strong = document.createElement("strong");
-                label.insertBefore(strong, label.firstChild);
-            }
-            strong.textContent = `${prefix}.${n}`;
+            label.querySelector(":scope > strong:first-child")?.remove();
+            const strong = document.createElement("strong");
+            strong.textContent = `${prefix}.${n}.`;
+            label.insertBefore(strong, label.firstChild);
         });
     }
 
@@ -1680,8 +1732,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? "Rincian Nilai Produksi/Penjualan/Pendapatan Tahun 2025"
                 : "Rincian Nilai Produksi/Penjualan/Pendapatan Selama Satu Bulan Terakhir",
             g: use2025
-                ? "Nilai aset selain tanah dan bangunan pada 31 Desember 2025"
-                : "Nilai aset selain tanah dan bangunan pada akhir bulan yang lalu"
+                ? "Nilai aset pada 31 Desember 2025"
+                : "Nilai aset pada akhir bulan yang lalu"
         };
 
         Object.entries(titles).forEach(([letter, title]) => {
@@ -1712,10 +1764,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 d: "Pekerja",
                 e: "Rincian Pengeluaran Selama Satu Bulan Terakhir",
                 f: "Rincian Nilai Produksi/Penjualan/Pendapatan Selama Satu Bulan Terakhir",
-                g: "Nilai aset selain tanah dan bangunan pada akhir bulan yang lalu"
+                g: "Nilai aset pada akhir bulan yang lalu"
             };
             heading.innerHTML = `<strong>${letter}.</strong> ${titles[letter]}`;
-            if (letter === "b") {
+            if (letter === "d") {
+                const workerBoxes = [];
+                section.querySelectorAll(":scope > .question-box, :scope > .form-grid > .question-box").forEach(box => {
+                    if (!workerBoxes.includes(box)) workerBoxes.push(box);
+                });
+                workerBoxes.forEach((box, index) => {
+                    const label = box.querySelector(":scope > label");
+                    if (!label) return;
+                    label.querySelector(":scope > strong:first-child")?.remove();
+                    const strong = document.createElement("strong");
+                    strong.textContent = `d.${index + 1}.`;
+                    label.insertBefore(strong, label.firstChild);
+                });
+            } else if (letter === "e" || letter === "f" || letter === "g") {
+                section.querySelectorAll(":scope > .usaha-period-branch").forEach(branch => {
+                    numberDirectQuestionBoxes(branch, letter);
+                });
+            } else if (letter === "b") {
                 section.querySelectorAll(":scope > .question-box").forEach(box => {
                     const label = box.querySelector(":scope > label");
                     if (!label) return;
@@ -1742,42 +1811,77 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function numberPengusahaSection(section) {
-        // c.1 ... c.14 are the direct questions in this group.
-        // The transaction question is the existing final question and is
-        // intentionally exposed as c.14; its child questions are c.14.1+.
+        // Penomoran Blok C mengikuti struktur pertanyaan yang sudah ada.
+        // c.10 = penggunaan internet, c.11 = tujuan penggunaan internet,
+        // c.12 = teknologi digital, c.13 = produk karya, c.14 = transaksi.
         const directBoxes = [];
         section.querySelectorAll(":scope > .question-box, :scope > .form-grid > .question-box").forEach(box => {
             if (box.parentElement?.closest(".question-box")) return;
             if (!directBoxes.includes(box)) directBoxes.push(box);
         });
 
-        let n = 0;
-        directBoxes.forEach(box => {
-            const label = box.querySelector(":scope > label");
-            if (!label) return;
-            n += 1;
-            label.querySelector(":scope > strong")?.remove();
-            const strong = document.createElement("strong");
-            strong.textContent = `c.${n}`;
-            label.insertBefore(strong, label.firstChild);
-        });
-
-        // The existing final transaction question is c.14 in the questionnaire
-        // hierarchy. Preserve its text and only change its visual numbering.
+        const internetBox = directBoxes.find(box =>
+            /menggunakan internet dalam menjalankan usaha/i.test(
+                box.textContent.replace(/\s+/g, " ")
+            )
+        );
+        const digitalBox = directBoxes.find(box =>
+            /memanfaatkan teknologi digital/i.test(
+                box.textContent.replace(/\s+/g, " ")
+            )
+        );
+        const karyaBox = directBoxes.find(box =>
+            /menggunakan produk karya seni, sastra, desain, teknologi atau warisan budaya/i.test(
+                box.textContent.replace(/\s+/g, " ")
+            )
+        );
         const transaction = directBoxes.find(box =>
             /melakukan penjualan\/pembelian kepada.*bukan penduduk Indonesia/i.test(
                 box.textContent.replace(/\s+/g, " ")
             )
         );
-        if (transaction) {
-            const label = transaction.querySelector(":scope > label");
-            if (label) {
-                label.querySelector(":scope > strong")?.remove();
-                const strong = document.createElement("strong");
-                strong.textContent = "c.14";
-                label.insertBefore(strong, label.firstChild);
+
+        directBoxes.forEach((box, index) => {
+            const label = box.querySelector(":scope > label");
+            if (!label) return;
+
+            let number = `c.${index + 1}`;
+            if (box === internetBox) number = "c.10";
+            else if (box === digitalBox) number = "c.12";
+            else if (box === karyaBox) number = "c.13";
+            else if (box === transaction) number = "c.14";
+
+            label.querySelector(":scope > strong")?.remove();
+            const strong = document.createElement("strong");
+            strong.textContent = number;
+            label.insertBefore(strong, label.firstChild);
+        });
+
+        // c.11 hanya tampil jika c.10 dijawab Iya.
+        const internetGroup = section.querySelector(':scope > [id^="tujuanPenggunaanInternet"]');
+        if (internetGroup) {
+            const internetLabel = internetGroup.querySelector(':scope > .question-box > label');
+            if (internetLabel) {
+                internetLabel.querySelector(':scope > strong')?.remove();
+                const strong = document.createElement('strong');
+                strong.textContent = 'c.11';
+                internetLabel.insertBefore(strong, internetLabel.firstChild);
             }
 
+            const tujuanRows = [...internetGroup.querySelectorAll(':scope > .question-box > .matrix-table > .matrix-row')];
+            tujuanRows.forEach((row, index) => {
+                const label = row.querySelector(':scope > .matrix-label');
+                if (!label) return;
+                label.querySelector(':scope > strong')?.remove();
+                const strong = document.createElement('strong');
+                strong.textContent = `c.11.${index + 1}`;
+                strong.style.marginRight = '6px';
+                label.insertBefore(strong, label.firstChild);
+            });
+        }
+
+        // Pertanyaan turunan transaksi tetap mengikuti struktur yang sudah ada.
+        if (transaction) {
             const children = [...transaction.querySelectorAll(":scope > .question-box")];
             children.forEach((child, index) => {
                 const childLabel = child.querySelector(":scope > label");
@@ -1786,30 +1890,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const strong = document.createElement("strong");
                 strong.textContent = `c.14.${index + 1}`;
                 childLabel.insertBefore(strong, childLabel.firstChild);
-            });
-        }
-
-        // c.10 = penggunaan internet; c.11 adalah kelompok tujuan yang
-        // tampil hanya ketika c.10 dijawab Iya. Setiap tujuan diberi
-        // penomoran c.11.1, c.11.2, dst. tanpa mengubah isi pertanyaan.
-        const internetGroup = section.querySelector(':scope > #tujuanPenggunaanInternet');
-        if (internetGroup) {
-            const internetLabel = internetGroup.querySelector(':scope > .question-box > label');
-            if (internetLabel) {
-                internetLabel.querySelector(':scope > strong')?.remove();
-                const strong = document.createElement('strong');
-                strong.textContent = 'c.10';
-                internetLabel.insertBefore(strong, internetLabel.firstChild);
-            }
-
-            const tujuanBoxes = [...internetGroup.querySelectorAll(':scope > .question-box > .question-box')];
-            tujuanBoxes.forEach((box, index) => {
-                const label = box.querySelector(':scope > label');
-                if (!label) return;
-                label.querySelector(':scope > strong')?.remove();
-                const strong = document.createElement('strong');
-                strong.textContent = `c.10.${index + 1}`;
-                label.insertBefore(strong, label.firstChild);
             });
         }
     }
@@ -1964,6 +2044,191 @@ document.addEventListener("DOMContentLoaded", () => {
             el.name = `${baseName}${suffix}`;
         });
     }
+
+
+    // =========================================================
+    // BLOK D — ALAMAT USAHA PER USAHAAN
+    // =========================================================
+
+    function firstWithin(card, baseId) {
+        const exact = card.querySelector(`#${CSS.escape(baseId)}`);
+        if (exact) return exact;
+        return card.querySelector(`[id^="${CSS.escape(baseId)}_"]`);
+    }
+
+    function checkedWithin(card, baseName) {
+        return card.querySelector(
+            `input[type="radio"][name^="${CSS.escape(baseName)}"]:checked`
+        )?.value || "";
+    }
+
+    function residenceAddressSnapshot() {
+        const kecamatanSelect = document.getElementById("fKecamatan");
+        const desaSelect = document.getElementById("fDesa");
+        const slsSelect = document.getElementById("fSls");
+
+        const isOther = kecamatanSelect?.value === "Lainnya";
+
+        return {
+            provinsi: document.getElementById("fProvinsi")?.value?.trim() || "Sumatera Selatan",
+            kabupaten: document.getElementById("fKabupaten")?.value?.trim() || "Ogan Ilir",
+            kecamatanMode: isOther ? "lainnya" : "normal",
+            kecamatan: isOther
+                ? document.getElementById("kecamatanLainnya")?.value?.trim() || ""
+                : kecamatanSelect?.value?.trim() || "",
+            desa: isOther
+                ? document.getElementById("desaLainnya")?.value?.trim() || ""
+                : desaSelect?.value?.trim() || "",
+            sls: isOther
+                ? document.getElementById("slsLainnya")?.value?.trim() || ""
+                : slsSelect?.value?.trim() || "",
+            alamat: document.getElementById("fAlamat")?.value?.trim() || ""
+        };
+    }
+
+    function setBusinessAddressEditable(card, editable) {
+        const container = firstWithin(card, "alamatUsahaFields");
+        if (!container) return;
+
+        container.querySelectorAll("input, select, textarea").forEach(el => {
+            // Readonly keeps the value included in collectData()/submission,
+            // unlike disabled fields which are intentionally omitted.
+            if (el.matches('[id^="usahaProvinsi"], [id^="usahaKabupaten"], [id^="usahaKecamatan"], [id^="usahaDesa"], [id^="usahaSls"], [id^="usahaAlamat"]')) {
+                el.readOnly = !editable;
+                el.classList.toggle("address-auto-locked", !editable);
+            }
+
+            // A select cannot be readonly, so prevent pointer interaction
+            // while keeping it enabled and therefore included in submission.
+            if (el.tagName === "SELECT") {
+                el.classList.toggle("address-auto-locked", !editable);
+                el.setAttribute("aria-readonly", editable ? "false" : "true");
+                el.style.pointerEvents = editable ? "" : "none";
+            }
+        });
+    }
+
+    function setBusinessAddressFieldsDisabled(card, disabled) {
+        const container = firstWithin(card, "alamatUsahaFields");
+        if (!container) return;
+
+        container.querySelectorAll("input, select, textarea").forEach(el => {
+            el.disabled = disabled;
+            if (disabled) {
+                el.classList.remove("invalid", "valid", "address-auto-locked");
+                el.removeAttribute("aria-invalid");
+            }
+        });
+    }
+
+    function setAddressFieldValue(field, value) {
+        if (!field) return;
+        const normalized = String(value ?? "").trim();
+
+        if (field.tagName === "SELECT") {
+            const option = [...field.options].find(opt =>
+                String(opt.value).trim().toLowerCase() === normalized.toLowerCase() ||
+                String(opt.textContent).trim().toLowerCase() === normalized.toLowerCase()
+            );
+
+            if (option) {
+                field.value = option.value;
+            } else if (normalized) {
+                // Keep the actual select value/submission synchronized even
+                // when the residence value is not present in its options.
+                field.appendChild(new Option(normalized, normalized, false, true));
+            } else {
+                field.value = "";
+            }
+            return;
+        }
+
+        field.value = normalized;
+    }
+
+    function clearBusinessAddressFields(card) {
+        const container = firstWithin(card, "alamatUsahaFields");
+        if (!container) return;
+
+        container.querySelectorAll(
+            '[id^="usahaProvinsi"], [id^="usahaKabupaten"], [id^="usahaKecamatan"], [id^="usahaDesa"], [id^="usahaSls"], [id^="usahaAlamat"]'
+        ).forEach(field => {
+            if (field.type === "radio" || field.type === "checkbox") {
+                field.checked = false;
+            } else {
+                field.value = "";
+            }
+            field.readOnly = false;
+            field.classList.remove("address-auto-locked", "invalid", "valid");
+            field.removeAttribute("aria-invalid");
+            if (field.tagName === "SELECT") {
+                field.setAttribute("aria-readonly", "false");
+                field.style.pointerEvents = "";
+            }
+        });
+    }
+
+    function fillBusinessAddressFromResidence(card) {
+        const address = residenceAddressSnapshot();
+
+        setAddressFieldValue(firstWithin(card, "usahaProvinsi"), address.provinsi);
+        setAddressFieldValue(firstWithin(card, "usahaKabupaten"), address.kabupaten);
+        setAddressFieldValue(firstWithin(card, "usahaKecamatan"), address.kecamatan);
+        setAddressFieldValue(firstWithin(card, "usahaDesa"), address.desa);
+        setAddressFieldValue(firstWithin(card, "usahaSls"), address.sls);
+        setAddressFieldValue(firstWithin(card, "usahaAlamat"), address.alamat);
+
+        setBusinessAddressFieldsDisabled(card, false);
+        setBusinessAddressEditable(card, false);
+    }
+
+    function prepareBusinessAddressManual(card) {
+        clearBusinessAddressFields(card);
+        setBusinessAddressFieldsDisabled(card, false);
+        setBusinessAddressEditable(card, true);
+    }
+
+    function syncBusinessAddressFields(card) {
+        const choice = checkedWithin(card, "alamatUsahaSama");
+        const fields = firstWithin(card, "alamatUsahaFields");
+
+        if (!fields) return;
+
+        if (!choice) {
+            fields.classList.add("hidden");
+            setBusinessAddressFieldsDisabled(card, true);
+            return;
+        }
+
+        fields.classList.remove("hidden");
+        setBusinessAddressFieldsDisabled(card, false);
+
+        if (choice === "iya") {
+            // Always resync from the latest residence values. This also makes
+            // Iya -> residence changed -> business address changed automatic.
+            fillBusinessAddressFromResidence(card);
+            card.dataset.businessAddressMode = "iya";
+            return;
+        }
+
+        // Iya -> Tidak must clear the copied values once, then leave the
+        // fields editable so the respondent can enter a different address.
+        if (card.dataset.businessAddressMode !== "manual") {
+            prepareBusinessAddressManual(card);
+        } else {
+            setBusinessAddressFieldsDisabled(card, false);
+            setBusinessAddressEditable(card, true);
+        }
+        card.dataset.businessAddressMode = "manual";
+    }
+
+    window.syncAllBusinessAddressesFromResidence = function () {
+        document.querySelectorAll(".usaha-identity-card").forEach(card => {
+            if (checkedWithin(card, "alamatUsahaSama") === "iya") {
+                fillBusinessAddressFromResidence(card);
+            }
+        });
+    };
 
     function updateIdentityCardTitle(card, index) {
         const heading = card.querySelector("h4.subheading");
@@ -2210,10 +2475,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const active = !card.classList.contains("hidden");
             if (!active) return;
 
+            syncBusinessAddressFields(card);
+
             const tahunOperasi = Number(card.querySelector('[id^="tahunOperasi"]')?.value || 0);
             // Tahun <= 2025 menggunakan periode Tahun 2025.
             // Tahun 2026 ke atas menggunakan periode Satu Bulan Terakhir.
-            const sebelumAtau2025 = memilikiUsaha && tahunOperasi >= 1900 && tahunOperasi <= 2025;
+            const sebelumAtau2025 = memilikiUsaha && tahunOperasi > 0 && tahunOperasi <= 2025;
             const tahun2026Keatas = memilikiUsaha && tahunOperasi >= 2026;
 
             card.querySelectorAll('[id^="usahaBranchBefore2026"]').forEach(el => {
@@ -2238,6 +2505,16 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             updateUsahaPeriodSectionTitles(card, sebelumAtau2025);
+            card.querySelectorAll(":scope > .usaha-subsection-card").forEach(section => {
+                const letter = section.dataset.usahaSection;
+                if (letter === "e" || letter === "f" || letter === "g") {
+                    // Each period branch (<=2025 and 2026+) is numbered
+                    // independently so the visible branch always starts at .1.
+                    section.querySelectorAll(":scope > .usaha-period-branch").forEach(branch => {
+                        numberDirectQuestionBoxes(branch, letter);
+                    });
+                }
+            });
 
             const nib = selectedWithin(card, "punyaNIB");
             toggleWithin(card, '[id^="nibField"]', memilikiUsaha && nib === "1");
@@ -2245,8 +2522,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (nib !== "1") clearWithin(card, '[id^="nibField"]');
             if (nib !== "2") clearWithin(card, '[id^="alasanTidakNIBField"]');
 
-            const alasanSelect = card.querySelector('[id^="alasanTidakNIBPilihan"]');
-            const alasan = alasanSelect?.value || "";
+            const alasan = selectedWithin(card, "alasanTidakNIBPilihan");
             const lainnya = memilikiUsaha && nib === "2" && alasan === "Lainnya";
             toggleWithin(card, '[id^="alasanTidakNIBLainnyaField"]', lainnya);
 
@@ -2680,8 +2956,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 () => {
 
                     if (
-                        input.id ===
-                        "persentaseOnline"
+                        input.id.startsWith("persentaseOnline")
                     ) {
 
                         const digits = input.value.replace(/[^0-9]/g, "");
@@ -2844,22 +3119,94 @@ document.addEventListener("DOMContentLoaded", () => {
     // SUBMIT
     // =========================================================
 
-    form.addEventListener(
-        "submit",
-        async e => {
+        // =========================================================
+    // SUBMIT CONFIRMATION + SINGLE SUBMISSION
+    // =========================================================
 
-            e.preventDefault();
+    const submitConfirmationModal =
+        document.getElementById("submitConfirmationModal");
+    const cancelSubmitConfirmation =
+        document.getElementById("cancelSubmitConfirmation");
+    const confirmSubmitData =
+        document.getElementById("confirmSubmitData");
 
+    let submissionInProgress = false;
 
-            if (
-                !validateStep(
-                    currentStep
-                )
-            ) {
-                return;
+    function validateAllForm() {
+        let firstInvalidStep = -1;
+
+        steps.forEach((_, index) => {
+            const stepValid = validateStep(index);
+            if (!stepValid && firstInvalidStep === -1) {
+                firstInvalidStep = index;
             }
+        });
 
+        if (firstInvalidStep === -1) return true;
 
+        showStep(firstInvalidStep);
+        const firstInvalid =
+            steps[firstInvalidStep]?.querySelector(".invalid, .invalid-group");
+        firstInvalid?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+        firstInvalid?.focus?.();
+
+        return false;
+    }
+
+    function openSubmitConfirmation() {
+        if (!submitConfirmationModal) return;
+        if (confirmSubmitData) {
+            confirmSubmitData.disabled = submissionInProgress;
+        }
+        submitConfirmationModal.classList.remove("hidden");
+        document.body.classList.add("submit-modal-open");
+        confirmSubmitData?.focus();
+    }
+
+    function closeSubmitConfirmation() {
+        submitConfirmationModal?.classList.add("hidden");
+        document.body.classList.remove("submit-modal-open");
+        if (!submissionInProgress && confirmSubmitData) {
+            confirmSubmitData.disabled = false;
+        }
+    }
+
+    cancelSubmitConfirmation?.addEventListener("click", () => {
+        if (!submissionInProgress) {
+            closeSubmitConfirmation();
+        }
+    });
+
+    form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        if (submissionInProgress) return;
+
+        updateAll();
+
+        // Submit selalu memvalidasi seluruh kuesioner terlebih dahulu.
+        if (!validateAllForm()) {
+            return;
+        }
+
+        openSubmitConfirmation();
+    });
+
+    confirmSubmitData?.addEventListener("click", async () => {
+        if (submissionInProgress) {
+            return;
+        }
+
+        submissionInProgress = true;
+        confirmSubmitData.disabled = true;
+        closeSubmitConfirmation();
+
+        // =========================================================
+        // SUBMIT ACTUAL — data hanya dikirim setelah konfirmasi.
+        // =========================================================
             updateAll();
 
 
@@ -2962,7 +3309,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const response =
                     await fetch(
-                        "api/submit",
+                        "api/submit.php",
                         {
                             method: "POST",
                             body: fd
@@ -3036,6 +3383,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     ?.classList.remove(
                         "hidden"
                     );
+
+                const successName =
+                    result.profile?.nama ||
+                    document.getElementById("nama")?.value ||
+                    "Responden";
+
+                const successNameEl =
+                    document.getElementById("successRespondentName");
+
+                if (successNameEl) {
+                    successNameEl.textContent = successName;
+                }
 
 
                 const detail =
@@ -3132,9 +3491,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         submitButton.dataset.originalText ||
                         "Kirim Data";
                 }
+
+                submissionInProgress = false;
             }
-        }
-    );
+    });
+
 
 
     // =========================================================

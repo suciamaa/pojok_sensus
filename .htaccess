@@ -1,0 +1,11 @@
+# Pojok Sensus - Native PHP routing
+RewriteEngine On
+Options -MultiViews
+
+# Map /api/endpoint to /api/endpoint.php without changing frontend URLs.
+RewriteRule ^api/([A-Za-z0-9_-]+)$ api/$1.php [L,QSA]
+
+# Keep normal files/directories untouched.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
